@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,18 +80,18 @@ public static class DependencyContainer
         });
     }
 
-    public static void UseApplications(this WebApplication app)
+    public static void UseApplications(this WebApplication application, IWebHostEnvironment environment)
     {
-        app.UseMiddleware<ExceptionHandler>();
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
+        application.UseMiddleware<ExceptionHandler>();
+        application.UseSwagger();
+        application.UseSwaggerUI(options =>
         {
             options.DocumentTitle = "Twitch Night Fall API Documentation";
             options.SwaggerEndpoint("/swagger/docs/swagger.json", "Twitch Night Fall API");
             options.RoutePrefix = "docs";
         });
-        app.UseCors("CorsPolicy");
-        app.UseAuthorization();
-        app.MapControllers();
+        application.UseCors("CorsPolicy");
+        application.UseAuthorization();
+        application.MapControllers();
     }
 }

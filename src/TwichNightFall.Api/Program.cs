@@ -1,6 +1,8 @@
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.IoC;
 
 
@@ -18,6 +20,13 @@ builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseApplications();
+if (app.Environment.IsDevelopment())
+{
+    var context = app.Services.GetRequiredService<ApplicationDbContext>();
+
+    context.Database.Migrate();
+}
+
+app.UseApplications(app.Environment);
 
 app.Run();
