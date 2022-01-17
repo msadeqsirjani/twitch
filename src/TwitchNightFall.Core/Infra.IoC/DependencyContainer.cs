@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Infra.Data;
+using TwitchNightFall.Core.Infra.IoC.MiddleWares;
 
 namespace TwitchNightFall.Core.Infra.IoC;
 
@@ -80,6 +81,7 @@ public static class DependencyContainer
 
     public static void UseApplications(this WebApplication app)
     {
+        app.UseMiddleware<ExceptionHandler>();
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
