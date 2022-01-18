@@ -20,6 +20,7 @@ public interface IRepository<T> : IDisposable where T : Auditable, new()
     void DeleteRange(IEnumerable<Guid> ids);
     void DeleteRange(Expression<Func<T, bool>> predicate);
     bool Exists(Expression<Func<T, bool>> predicate);
+    int Count(Expression<Func<T, bool>> predicate);
     T? ExecuteScalar(string query, params SqlParameter[] parameters);
     void ExecuteNonQuery(string query, params SqlParameter[] parameters);
     IEnumerable<T> ExecuteReader(string query, params SqlParameter[] parameters);
@@ -35,6 +36,7 @@ public interface IRepositoryAsync<T> : IAsyncDisposable, IRepository<T> where T 
     Task DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
     Task DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<T?> ExecuteScalarAsync(string query, CancellationToken cancellationToken = default, params SqlParameter[] parameters);
     Task ExecuteNonQueryAsync(string query, CancellationToken cancellationToken = default, params SqlParameter[] parameters);
     Task<IEnumerable<T>> ExecuteReaderAsync(string query, CancellationToken cancellationToken = default, params SqlParameter[] parameters);

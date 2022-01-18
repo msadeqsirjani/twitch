@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,11 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
+using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Application.ViewModels.FollowerAward;
 using TwitchNightFall.Core.Infra.Data;
+using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
 using TwitchNightFall.Core.Infra.IoC.MiddleWares;
 using TwitchNightFall.Domain.Repository;
+using TwitchNightFall.Domain.Repository.Common;
 
 namespace TwitchNightFall.Core.Infra.IoC;
 
@@ -25,12 +30,19 @@ public static class DependencyContainer
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+        services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IUnitOfWorkAsync, UnitOfWorkAsync>();
         services.AddTransient(typeof(IService<>), typeof(Service<>));
         services.AddTransient(typeof(IServiceAsync<>), typeof(ServiceAsync<>));
         services.AddTransient<ILogService, LogService>();
         services.AddTransient<ITwitchAccountRepository, TwitchAccountRepository>();
         services.AddTransient<IFollowerAwardRepository, FollowerAwardRepository>();
+        services.AddTransient<ITwitchAccountService, TwitchAccountService>();
+        services.AddTransient<IFollowerAwardService, FollowerAwardService>();
         services.AddTransient<ITwitchHelixService, TwitchHelixService>();
+        services.AddTransient<IValidator<FollowerAwardAddDto>, FollowerAwardAddDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
 

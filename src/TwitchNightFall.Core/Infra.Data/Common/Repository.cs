@@ -94,6 +94,11 @@ public class Repository<T> : IRepository<T> where T : Auditable, new()
         return DbSet.Any(predicate);
     }
 
+    public int Count(Expression<Func<T, bool>> predicate)
+    {
+        return DbSet.Count(predicate);
+    }
+
     public T? ExecuteScalar(string query, params SqlParameter[] parameters)
     {
         var connection = Context.Database.GetDbConnection();
@@ -214,6 +219,11 @@ public class RepositoryAsync<T> : Repository<T>, IRepositoryAsync<T> where T : A
     public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return DbSet.AnyAsync(predicate, cancellationToken);
+    }
+
+    public Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return DbSet.CountAsync(predicate, cancellationToken);
     }
 
     public async Task<T?> ExecuteScalarAsync(string query, CancellationToken cancellationToken = default,

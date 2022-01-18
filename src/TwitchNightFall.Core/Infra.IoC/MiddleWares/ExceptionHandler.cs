@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using TwitchNightFall.Core.Application.Common;
+using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Core.Infra.IoC.MiddleWares;
@@ -20,22 +21,25 @@ public class ExceptionHandler
         _environment = environment;
     }
 
-    public Task Invoke(HttpContext context)
+    public async Task Invoke(HttpContext context)
     {
         try
         {
-            return _next(context);
+            await _next(context);
         }
         catch (Exception exception)
         {
-            return HandleExceptionAsync(context, exception, _environment);
+            await HandleExceptionAsync(context, exception);
         }
     }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 200;
+
+        if (exception is MessageException messageException)
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(Result.WithException(messageException.Message)));
 
         _logService.LogError(exception);
 

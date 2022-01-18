@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TwitchNightFall.Core.Infra.Data.Configuration;
 using TwitchNightFall.Domain.Common;
 using TwitchNightFall.Domain.Entities;
 
@@ -19,6 +20,14 @@ public class ApplicationDbContext : DbContext
         ApplyAuditing();
 
         return base.SaveChanges();
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new TwtichAccountConfiguration());
+        modelBuilder.ApplyConfiguration(new FollowerAwardConfiguration());
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -59,7 +68,7 @@ public class ApplicationDbContext : DbContext
             .OfType<Auditable>()
             .ToList();
 
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
 
         addedEntries.ForEach(x =>
         {

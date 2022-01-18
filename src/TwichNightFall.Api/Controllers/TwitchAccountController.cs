@@ -4,8 +4,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-[Route("[controller]")]
-public class TwitchAccountController : ControllerBase
+public class TwitchAccountController : BaseController
 {
     private readonly ITwitchHelixService _twitchHelixService;
 

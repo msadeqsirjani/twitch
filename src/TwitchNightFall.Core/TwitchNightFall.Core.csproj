@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Mappers\" />
-    <Folder Include="Application\Validators\" />
   </ItemGroup>
 
   <ItemGroup>

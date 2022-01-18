@@ -11,8 +11,8 @@ namespace TwitchNightFall.Core.Application.Services
 {
     public interface ITwitchHelixService
     {
-        Task<TwitchAccountData?> GetTwitchAccountData(string username);
-        Task<bool> IsTwitchAccountAvailable(string username);
+        Task<TwitchAccountData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new());
+        Task<bool> IsTwitchAccountAvailable(string username, CancellationToken cancellationToken = new());
     }
 
     public class TwitchHelixService : ITwitchHelixService
@@ -26,7 +26,7 @@ namespace TwitchNightFall.Core.Application.Services
             _options = options.Value;
         }
 
-        public async Task<TwitchAccountData?> GetTwitchAccountData(string username)
+        public async Task<TwitchAccountData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new())
         {
             var request = new HttpRequestMessage
             {
@@ -38,19 +38,19 @@ namespace TwitchNightFall.Core.Application.Services
                     { "Client-Id", _options.ClientId },
                 },
             };
-            
-            using var response = await _client.SendAsync(request);
-            
-            var body = await response.Content.ReadAsStringAsync();
+
+            using var response = await _client.SendAsync(request, cancellationToken);
+
+            var body = await response.Content.ReadAsStringAsync(cancellationToken);
 
             var data = JsonConvert.DeserializeObject<TwitchAccountViewModel>(body);
 
             return data.Data.FirstOrDefault();
         }
 
-        public async Task<bool> IsTwitchAccountAvailable(string username)
+        public async Task<bool> IsTwitchAccountAvailable(string username, CancellationToken cancellationToken = new())
         {
-            return await GetTwitchAccountData(username) != null;
+            return await GetTwitchAccountData(username, cancellationToken) != null;
         }
     }
 }
