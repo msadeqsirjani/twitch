@@ -8,8 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
+using TwitchNightFall.Core.Application.ViewModels;
 using TwitchNightFall.Core.Infra.Data;
+using TwitchNightFall.Core.Infra.Data.Repository;
 using TwitchNightFall.Core.Infra.IoC.MiddleWares;
+using TwitchNightFall.Domain.Repository;
 
 namespace TwitchNightFall.Core.Infra.IoC;
 
@@ -25,6 +28,13 @@ public static class DependencyContainer
         services.AddTransient(typeof(IService<>), typeof(Service<>));
         services.AddTransient(typeof(IServiceAsync<>), typeof(ServiceAsync<>));
         services.AddTransient<ILogService, LogService>();
+        services.AddTransient<ITwitchAccountRepository, TwitchAccountRepository>();
+        services.AddTransient<IFollowerAwardRepository, FollowerAwardRepository>();
+        services.AddTransient<ITwitchHelixService, TwitchHelixService>();
+
+        services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
+
+        services.AddHttpClient();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         

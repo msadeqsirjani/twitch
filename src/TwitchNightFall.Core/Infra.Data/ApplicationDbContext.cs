@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TwitchNightFall.Domain.Common;
+using TwitchNightFall.Domain.Entities;
 
 namespace TwitchNightFall.Core.Infra.Data;
 
@@ -9,6 +10,9 @@ public class ApplicationDbContext : DbContext
     {
 
     }
+
+    public DbSet<TwitchAccount> TwitchAccounts { get; set; }
+    public DbSet<FollowerAward> FollowerAwards { get; set; }
 
     public override int SaveChanges()
     {

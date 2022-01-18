@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((_, configuration) =>
 {
     configuration.WriteTo.Console();
-    configuration.WriteTo.File("Logs", LogEventLevel.Error, fileSizeLimitBytes: 10240,
+    configuration.WriteTo.File("Logs/log.txt", LogEventLevel.Error, fileSizeLimitBytes: 10240,
         rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, encoding: Encoding.UTF8);
 });
 
@@ -19,13 +19,6 @@ builder.Host.UseSerilog((_, configuration) =>
 builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    var context = app.Services.GetRequiredService<ApplicationDbContext>();
-
-    context.Database.Migrate();
-}
 
 app.UseApplications(app.Environment);
 
