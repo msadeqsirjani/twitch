@@ -46,12 +46,12 @@ public class FollowerAwardService : ServiceAsync<FollowerAward>, IFollowerAwardS
 
         var (twitchAccountId, isGiftEnabled) = await _twitchAccountService.InsertIfNotExistsAsync(username, cancellationToken);
 
-        //if (isGiftEnabled)
-        //{
-        //    var giftFollowerAward = new FollowerAward(twitchAccountId, _options.FollowerGift);
+        if (isGiftEnabled)
+        {
+            var giftFollowerAward = new FollowerAward(twitchAccountId, _options.FollowerGift);
 
-        //    await Repository.AddAsync(giftFollowerAward, cancellationToken);
-        //}
+            await Repository.AddAsync(giftFollowerAward, cancellationToken);
+        }
 
         var followerAward = new FollowerAward(twitchAccountId, prize);
 
@@ -61,7 +61,7 @@ public class FollowerAwardService : ServiceAsync<FollowerAward>, IFollowerAwardS
             x.TwitchAccountId == twitchAccountId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
 
         if (count >= _options.FollowerBoundary)
-            throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان استفاده کند");
+            throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان در روز استفاده کند");
 
         await Repository.AddAsync(followerAward, cancellationToken);
 

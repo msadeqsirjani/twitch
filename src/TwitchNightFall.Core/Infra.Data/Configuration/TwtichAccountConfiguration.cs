@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TwitchNightFall.Domain.Entities;
 
 namespace TwitchNightFall.Core.Infra.Data.Configuration;
@@ -15,7 +16,8 @@ public class TwtichAccountConfiguration : AuditableConfiguration<TwitchAccount>
 
         builder.HasMany(x => x.FollowerAwards)
             .WithOne(x => x.TwitchAccount)
-            .HasForeignKey(x => x.TwitchAccountId);
+            .HasForeignKey(x => x.TwitchAccountId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Username, "IX_TwitchAccount_Username")
             .IsUnique();
