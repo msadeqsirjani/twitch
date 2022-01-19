@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Any;
+﻿using Gridify;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class TwitchController : BaseController
+[Route("[controller]/[action]")]
+public class TwitchController : ControllerBase
 {
     private readonly ITwitchService _twitchService;
     private readonly IForgivenessService _forgivenessService;
@@ -17,7 +19,8 @@ public class TwitchController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> ValidateTwitchAccount(string username)
+    [AllowAnonymous]
+    public async Task<IActionResult> Availability(string username)
     {
         var twitchAccountId = await _twitchService.AddAsync(username);
 
@@ -25,10 +28,20 @@ public class TwitchController : BaseController
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> Forgiveness(Guid twitchAccountId, int prize)
     {
-        await _forgivenessService.AddAward(twitchAccountId, prize);
+        await _forgivenessService.AddAsync(twitchAccountId, prize);
 
         return Ok(Result.WithSuccess(Statement.Success));
+    }
+
+    [HttpPost]
+    //[Authorize]
+    public IActionResult Monitoring([FromBody] GridRequest request)
+    {
+        var twitches = _forgivenessService.ShowAsync(request); 
+
+        return Ok(Result.WithSuccess(twitches));
     }
 }

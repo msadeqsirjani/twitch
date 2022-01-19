@@ -1,8 +1,6 @@
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
-using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.IoC;
 
 
