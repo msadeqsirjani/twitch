@@ -11,7 +11,7 @@ using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
-using TwitchNightFall.Core.Application.ViewModels.FollowerAward;
+using TwitchNightFall.Core.Application.ViewModels.Forgiveness;
 using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
@@ -37,12 +37,12 @@ public static class DependencyContainer
         services.AddTransient(typeof(IService<>), typeof(Service<>));
         services.AddTransient(typeof(IServiceAsync<>), typeof(ServiceAsync<>));
         services.AddTransient<ILogService, LogService>();
-        services.AddTransient<ITwitchAccountRepository, TwitchAccountRepository>();
-        services.AddTransient<IFollowerAwardRepository, FollowerAwardRepository>();
-        services.AddTransient<ITwitchAccountService, TwitchAccountService>();
-        services.AddTransient<IFollowerAwardService, FollowerAwardService>();
+        services.AddTransient<ITwitchRepository, TwitchRepository>();
+        services.AddTransient<IForgivenessRepository, ForgivenessRepository>();
+        services.AddTransient<ITwitchService, TwitchService>();
+        services.AddTransient<IForgivenessService, ForgivenessService>();
         services.AddTransient<ITwitchHelixService, TwitchHelixService>();
-        services.AddTransient<IValidator<FollowerAwardAddDto>, FollowerAwardAddDtoValidator>();
+        services.AddTransient<IValidator<ForgivenessAddDto>, ForgivenessAddDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
 

@@ -12,8 +12,8 @@ public class ApplicationDbContext : DbContext
 
     }
 
-    public DbSet<TwitchAccount> TwitchAccounts { get; set; }
-    public DbSet<FollowerAward> FollowerAwards { get; set; }
+    public DbSet<Twitch> Twitch { get; set; }
+    public DbSet<Forgiveness> Foregivness { get; set; }
 
     public override int SaveChanges()
     {
@@ -26,8 +26,8 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfiguration(new TwtichAccountConfiguration());
-        modelBuilder.ApplyConfiguration(new FollowerAwardConfiguration());
+        modelBuilder.ApplyConfiguration(new TwtichConfiguration());
+        modelBuilder.ApplyConfiguration(new ForgivenessConfiguration());
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)

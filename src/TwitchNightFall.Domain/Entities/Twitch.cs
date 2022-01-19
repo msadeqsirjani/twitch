@@ -2,14 +2,14 @@
 
 namespace TwitchNightFall.Domain.Entities;
 
-public class TwitchAccount : Auditable
+public class Twitch : Auditable
 {
-    public TwitchAccount()
+    public Twitch()
     {
         
     }
 
-    public TwitchAccount(string username)
+    public Twitch(string username)
     {
         Id = Guid.NewGuid();
         Username = username;
@@ -17,5 +17,5 @@ public class TwitchAccount : Auditable
 
     public string Username { get; set; }
 
-    public ICollection<FollowerAward> FollowerAwards { get; set; }
+    public ICollection<Forgiveness> Forgiveness { get; set; }
 }

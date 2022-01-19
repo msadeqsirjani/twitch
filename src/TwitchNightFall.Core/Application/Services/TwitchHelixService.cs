@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TwitchNightFall.Core.Application.ViewModels;
 
@@ -11,7 +6,7 @@ namespace TwitchNightFall.Core.Application.Services
 {
     public interface ITwitchHelixService
     {
-        Task<TwitchAccountData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new());
+        Task<TwitchData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new());
         Task<bool> IsTwitchAccountAvailable(string username, CancellationToken cancellationToken = new());
     }
 
@@ -26,7 +21,7 @@ namespace TwitchNightFall.Core.Application.Services
             _options = options.Value;
         }
 
-        public async Task<TwitchAccountData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new())
+        public async Task<TwitchData?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new())
         {
             var request = new HttpRequestMessage
             {

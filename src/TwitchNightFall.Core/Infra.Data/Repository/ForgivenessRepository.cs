@@ -4,9 +4,9 @@ using TwitchNightFall.Domain.Repository;
 
 namespace TwitchNightFall.Core.Infra.Data.Repository;
 
-public class TwitchAccountRepository : RepositoryAsync<TwitchAccount>, ITwitchAccountRepository
+public class ForgivenessRepository : RepositoryAsync<Forgiveness>, IForgivenessRepository
 {
-    public TwitchAccountRepository(ApplicationDbContext context) : base(context)
+    public ForgivenessRepository(ApplicationDbContext context) : base(context)
     {
     }
 }

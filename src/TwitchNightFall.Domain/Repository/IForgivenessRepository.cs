@@ -3,7 +3,7 @@ using TwitchNightFall.Domain.Repository.Common;
 
 namespace TwitchNightFall.Domain.Repository;
 
-public interface ITwitchAccountRepository : IRepositoryAsync<TwitchAccount>
+public interface IForgivenessRepository : IRepositoryAsync<Forgiveness>
 {
 
 }

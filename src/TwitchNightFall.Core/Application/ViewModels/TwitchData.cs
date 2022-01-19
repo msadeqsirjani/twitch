@@ -2,7 +2,7 @@
 
 namespace TwitchNightFall.Core.Application.ViewModels;
 
-public class TwitchAccountData
+public class TwitchData
 {
     [JsonProperty("id")]
     public string? Id { get; set; }
@@ -28,8 +28,8 @@ public class TwitchAccountViewModel
 {
     public TwitchAccountViewModel()
     {
-        Data = new List<TwitchAccountData>();
+        Data = new List<TwitchData>();
     }
 
-    public List<TwitchAccountData> Data { get; set; }
+    public List<TwitchData> Data { get; set; }
 }

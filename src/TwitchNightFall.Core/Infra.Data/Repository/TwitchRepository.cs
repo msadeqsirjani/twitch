@@ -4,9 +4,9 @@ using TwitchNightFall.Domain.Repository;
 
 namespace TwitchNightFall.Core.Infra.Data.Repository;
 
-public class FollowerAwardRepository : RepositoryAsync<FollowerAward>, IFollowerAwardRepository
+public class TwitchRepository : RepositoryAsync<Twitch>, ITwitchRepository
 {
-    public FollowerAwardRepository(ApplicationDbContext context) : base(context)
+    public TwitchRepository(ApplicationDbContext context) : base(context)
     {
     }
 }

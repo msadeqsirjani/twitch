@@ -2,7 +2,7 @@
 
 namespace TwitchNightFall.Api.Controllers;
 
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class BaseController : ControllerBase
 {
 }

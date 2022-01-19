@@ -4,20 +4,22 @@ using TwitchNightFall.Domain.Entities;
 
 namespace TwitchNightFall.Core.Infra.Data.Configuration;
 
-public class FollowerAwardConfiguration : AuditableConfiguration<FollowerAward>
+public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
 {
-    public override void Configure(EntityTypeBuilder<FollowerAward> builder)
+    public override void Configure(EntityTypeBuilder<Forgiveness> builder)
     {
         base.Configure(builder);
 
-        builder.Property(x => x.TwitchAccountId)
+        builder.ToTable("Forgiveness", "ray");
+
+        builder.Property(x => x.TwitchId)
             .IsRequired();
         builder.Property(x => x.Prize)
             .IsRequired();
 
         builder.HasOne(x => x.TwitchAccount)
-            .WithMany(x => x.FollowerAwards)
-            .HasForeignKey(x => x.TwitchAccountId)
+            .WithMany(x => x.Forgiveness)
+            .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

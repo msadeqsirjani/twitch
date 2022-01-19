@@ -3,7 +3,7 @@ using TwitchNightFall.Domain.Repository.Common;
 
 namespace TwitchNightFall.Domain.Repository;
 
-public interface IFollowerAwardRepository : IRepositoryAsync<FollowerAward>
+public interface ITwitchRepository : IRepositoryAsync<Twitch>
 {
 
 }
