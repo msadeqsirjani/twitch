@@ -1,17 +1,11 @@
-﻿using System.Reflection;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
-using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
-using TwitchNightFall.Core.Application.ViewModels.Forgiveness;
 using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
@@ -25,7 +19,7 @@ public static class DependencyContainer
 {
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers().AddFluentValidation();
+        services.AddControllers();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -41,20 +35,14 @@ public static class DependencyContainer
         services.AddTransient<IForgivenessRepository, ForgivenessRepository>();
         services.AddTransient<ITwitchService, TwitchService>();
         services.AddTransient<IForgivenessService, ForgivenessService>();
-        services.AddTransient<ITwitchHelixService, TwitchHelixService>();
-        services.AddTransient<IValidator<ForgivenessAddDto>, ForgivenessAddDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
+        services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
 
         services.AddHttpClient();
 
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        
-        services.AddCors(options =>
-            options.AddPolicy("CorsPolicy", config => config.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .Build()));
+        services.AddCors(options => options.AddPolicy("CorsPolicy",
+            builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().Build()));
         
         services.AddEndpointsApiExplorer();
         
@@ -102,7 +90,7 @@ public static class DependencyContainer
         });
     }
 
-    public static void UseApplications(this WebApplication application, IWebHostEnvironment environment)
+    public static void UseApplications(this WebApplication application)
     {
         application.UseMiddleware<ExceptionHandler>();
         application.UseSwagger();
@@ -114,6 +102,7 @@ public static class DependencyContainer
         });
         application.UseCors("CorsPolicy");
         application.UseAuthorization();
+        application.UseAuthentication();
         application.MapControllers();
     }
 }

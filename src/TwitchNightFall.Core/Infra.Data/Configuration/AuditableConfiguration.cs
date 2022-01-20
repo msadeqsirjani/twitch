@@ -12,8 +12,10 @@ public class AuditableConfiguration<T> : IEntityTypeConfiguration<T> where T : A
 
         builder.Property(x => x.Id)
             .IsRequired();
+       
         builder.Property(x => x.CreatedAt)
             .IsRequired();
+        
         builder.Property(x => x.ModifiedAt)
             .IsRequired();
     }

@@ -13,7 +13,8 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Twitch> Twitch { get; set; }
-    public DbSet<Forgiveness> Foregivness { get; set; }
+    public DbSet<Forgiveness> Forgiveness { get; set; }
+    public DbSet<Administrator> Administrator { get; set; }
 
     public override int SaveChanges()
     {
@@ -28,6 +29,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(new TwtichConfiguration());
         modelBuilder.ApplyConfiguration(new ForgivenessConfiguration());
+        modelBuilder.ApplyConfiguration(new AdministratorConfiguration());
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)

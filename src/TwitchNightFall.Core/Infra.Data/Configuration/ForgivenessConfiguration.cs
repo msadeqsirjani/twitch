@@ -14,10 +14,11 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
 
         builder.Property(x => x.TwitchId)
             .IsRequired();
+       
         builder.Property(x => x.Prize)
             .IsRequired();
 
-        builder.HasOne(x => x.TwitchAccount)
+        builder.HasOne(x => x.Twitch)
             .WithMany(x => x.Forgiveness)
             .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);

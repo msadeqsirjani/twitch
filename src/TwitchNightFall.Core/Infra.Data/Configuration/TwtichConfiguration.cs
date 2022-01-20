@@ -17,7 +17,7 @@ public class TwtichConfiguration : AuditableConfiguration<Twitch>
             .HasMaxLength(250);
 
         builder.HasMany(x => x.Forgiveness)
-            .WithOne(x => x.TwitchAccount)
+            .WithOne(x => x.Twitch)
             .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);
 

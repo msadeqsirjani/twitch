@@ -20,5 +20,5 @@ public class Forgiveness : Auditable
     public int Prize { get; set; }
     public bool IsChecked { get; set; }
 
-    public Twitch? TwitchAccount { get; set; }
+    public Twitch Twitch { get; set; }
 }

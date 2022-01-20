@@ -18,6 +18,6 @@ builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseApplications(app.Environment);
+app.UseApplications();
 
 app.Run();

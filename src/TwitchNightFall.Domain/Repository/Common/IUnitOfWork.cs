@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace TwitchNightFall.Domain.Repository.Common;
+﻿namespace TwitchNightFall.Domain.Repository.Common;
 
 public interface IUnitOfWork : IDisposable
 {

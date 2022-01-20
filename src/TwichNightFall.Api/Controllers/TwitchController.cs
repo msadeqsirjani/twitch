@@ -6,7 +6,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-[Route("[controller]/[action]")]
+[Route("[controller]")]
 public class TwitchController : ControllerBase
 {
     private readonly ITwitchService _twitchService;
@@ -18,7 +18,7 @@ public class TwitchController : ControllerBase
         _forgivenessService = forgivenessService;
     }
 
-    [HttpGet]
+    [HttpGet("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Availability(string username)
     {
@@ -27,7 +27,7 @@ public class TwitchController : ControllerBase
         return Ok(Result.WithSuccess(twitchAccountId));
     }
 
-    [HttpGet]
+    [HttpGet("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Forgiveness(Guid twitchAccountId, int prize)
     {
@@ -36,7 +36,8 @@ public class TwitchController : ControllerBase
         return Ok(Result.WithSuccess(Statement.Success));
     }
 
-    [HttpPost]
+    [HttpPost("[action]")]
+    [AllowAnonymous]
     //[Authorize]
     public IActionResult Monitoring([FromBody] GridRequest request)
     {
