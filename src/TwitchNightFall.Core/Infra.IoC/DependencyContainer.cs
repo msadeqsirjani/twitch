@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
@@ -24,6 +27,31 @@ public static class DependencyContainer
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+        var setting = new JwtSetting();
+
+        configuration.Bind("JwtSetting", setting);
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(setting.IssuerSigningKey)),
+                ValidateIssuer = setting.ValidateIssuer,
+                ValidIssuer = setting.ValidIssuer,
+                ValidateAudience = setting.ValidateAudience,
+                ValidAudience = setting.ValidAudience,
+                RequireExpirationTime = setting.RequireExpirationTime,
+                ValidateLifetime = setting.ValidateLifetime,
+                ClockSkew = TimeSpan.FromDays(1)
+            };
+        });
+
         services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
         services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
         services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -37,6 +65,7 @@ public static class DependencyContainer
         services.AddTransient<IForgivenessService, ForgivenessService>();
         services.AddTransient<IAdministratorRepository, AdministratorRepository>();
         services.AddTransient<IAdministratorService, AdministratorService>();
+        services.AddTransient<IJwtService, JwtService>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
