@@ -38,13 +38,23 @@ public class ExceptionHandler
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 200;
 
-        if (exception is MessageException messageException)
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(Result.WithException(messageException.Message)));
+        switch (exception)
+        {
+            case MessageException messageException:
+                return context.Response.WriteAsync(JsonConvert.SerializeObject(Result.WithException(messageException.Message)));
+            case UnAuthorizedException unAuthorizedException:
+                {
+                    context.Response.StatusCode = 401;
 
-        _logService.LogError(exception);
+                    return context.Response.WriteAsync(
+                        JsonConvert.SerializeObject(Result.WithException(unAuthorizedException.Message)));
+                }
+            default:
+                _logService.LogError(exception);
 
-        return context.Response.WriteAsync(_environment.IsDevelopment()
-            ? JsonConvert.SerializeObject(Result.WithException(exception))
-            : JsonConvert.SerializeObject(Result.WithException(Statement.Failure)));
+                return context.Response.WriteAsync(_environment.IsDevelopment()
+                    ? JsonConvert.SerializeObject(Result.WithException(exception))
+                    : JsonConvert.SerializeObject(Result.WithException(Statement.Failure)));
+        }
     }
 }

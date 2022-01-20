@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Core.Application.Extensions;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
@@ -27,31 +30,6 @@ public static class DependencyContainer
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        var setting = new JwtSetting();
-
-        configuration.Bind("JwtSetting", setting);
-
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.SaveToken = true;
-            options.TokenValidationParameters = new TokenValidationParameters()
-            {
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(setting.IssuerSigningKey)),
-                ValidateIssuer = setting.ValidateIssuer,
-                ValidIssuer = setting.ValidIssuer,
-                ValidateAudience = setting.ValidateAudience,
-                ValidAudience = setting.ValidAudience,
-                RequireExpirationTime = setting.RequireExpirationTime,
-                ValidateLifetime = setting.ValidateLifetime,
-                ClockSkew = TimeSpan.FromDays(1)
-            };
-        });
-
         services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
         services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
         services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -66,6 +44,7 @@ public static class DependencyContainer
         services.AddTransient<IAdministratorRepository, AdministratorRepository>();
         services.AddTransient<IAdministratorService, AdministratorService>();
         services.AddTransient<IJwtService, JwtService>();
+        services.AddTransient<IFileService, FileService>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
@@ -74,9 +53,54 @@ public static class DependencyContainer
 
         services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().Build()));
-        
+
         services.AddEndpointsApiExplorer();
-        
+
+        var setting = new JwtSetting();
+
+        configuration.Bind("JwtSetting", setting);
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(setting.IssuerSigningKey)),
+                    ValidateIssuer = setting.ValidateIssuer,
+                    ValidIssuer = setting.ValidIssuer,
+                    ValidateAudience = setting.ValidateAudience,
+                    ValidAudience = setting.ValidAudience,
+                    RequireExpirationTime = setting.RequireExpirationTime,
+                    ValidateLifetime = setting.ValidateLifetime,
+                    ClockSkew = TimeSpan.FromDays(1)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        try
+                        {
+                            var token = context.HttpContext.GetAuthenticationToken();
+
+                            var handler = new JwtSecurityTokenHandler();
+
+                            handler.ValidateToken(token, options.TokenValidationParameters, out _);
+
+                            return Task.CompletedTask;
+                        }
+                        catch
+                        {
+                            throw new UnAuthorizedException("احراز هویت کاربر با مشکل مواجه شده است");
+                        }
+                    }
+                };
+            });
+
+        services.AddAuthorization();
+
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("docs", new OpenApiInfo
@@ -132,8 +156,8 @@ public static class DependencyContainer
             options.RoutePrefix = "docs";
         });
         application.UseCors("CorsPolicy");
-        application.UseAuthorization();
         application.UseAuthentication();
+        application.UseAuthorization();
         application.MapControllers();
     }
 }
