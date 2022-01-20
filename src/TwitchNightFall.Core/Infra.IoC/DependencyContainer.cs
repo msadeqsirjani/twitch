@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +14,9 @@ using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Extensions;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
+using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Application.ViewModels.Administrator;
 using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
@@ -26,7 +30,9 @@ public static class DependencyContainer
 {
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers();
+        services.AddControllers().AddFluentValidation();
+
+        services.AddTransient<IValidator<AdministratorDto>, AdministratorDtoValidator>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

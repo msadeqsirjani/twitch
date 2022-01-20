@@ -1,6 +1,6 @@
 ﻿using TwitchNightFall.Domain.Entities;
 
-namespace TwitchNightFall.Core.Application.ViewModels;
+namespace TwitchNightFall.Core.Application.ViewModels.Twitch;
 
 public class MonitorTwitch
 {

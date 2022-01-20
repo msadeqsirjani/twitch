@@ -18,9 +18,16 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
         builder.Property(x => x.Prize)
             .IsRequired();
 
+        builder.Property(x => x.ModifiedBy);
+
         builder.HasOne(x => x.Twitch)
             .WithMany(x => x.Forgiveness)
             .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Administrator)
+            .WithMany(x => x.Forgiveness)
+            .HasForeignKey(x => x.ModifiedBy)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

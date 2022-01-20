@@ -1,9 +1,11 @@
 ﻿using Gridify;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Repository.Common;
 
@@ -11,8 +13,8 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
-    Task AddAsync(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
-    Task CompleteAsync(Guid id, CancellationToken cancellationToken = new());
+    Task<Result> Forgiveness(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
+    Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new());
     Paging<MonitorTwitch> ShowDetail(GridifyQuery request);
     Paging<ForgivenessDto> ShowHistory(GridifyQuery request);
 }
@@ -33,15 +35,16 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         _options = options.Value;
     }
 
-    public async Task AddAsync(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new())
+    public async Task<Result> Forgiveness(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new())
     {
+        var isFirstForgiveness = false;
         if (prize is > 5 or < 0)
             throw new MessageException("تعداد فالوور های هدیه داده شده نمی تواند کمتر از 0 و بیشتر از 5 باشد");
 
         var now = DateTime.UtcNow;
 
         var count = await Repository.CountAsync(x =>
-            x.TwitchId == twitchAccountId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
+            x.TwitchId == twitchAccountId && x.Prize != _options.FollowerGift && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
 
         if (count >= _options.FollowerBoundary)
             throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان در روز استفاده کند");
@@ -49,11 +52,40 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         if (!await _twitchService.ExistsAsync(x => x.Id == twitchAccountId, cancellationToken))
             throw new MessageException("کاربری با چنین شناسه ای یافت نشد");
 
-        var followerAward = new Forgiveness(twitchAccountId, prize);
+        Forgiveness forgiveness;
+        if (count == 0)
+        {
+            forgiveness = new Forgiveness(twitchAccountId, _options.FollowerGift);
 
-        await Repository.AddAsync(followerAward, cancellationToken);
+            await Repository.AddAsync(forgiveness, cancellationToken);
+
+            isFirstForgiveness = true;
+        }
+
+        forgiveness = new Forgiveness(twitchAccountId, prize);
+
+        await Repository.AddAsync(forgiveness, cancellationToken);
 
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
+
+        return Result.WithSuccess(new { IsFirstForgiveness = isFirstForgiveness }, Statement.Success);
+    }
+
+    public async Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new())
+    {
+        var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (forgiveness == null)
+            throw new MessageException("شناسه قرعه کشی موجود نمی باشد");
+
+        forgiveness.IsChecked = true;
+        forgiveness.ModifiedBy = administrator;
+
+        Repository.Attach(forgiveness);
+
+        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
+
+        return Result.WithSuccess(Statement.Success);
     }
 
     public Paging<MonitorTwitch> ShowDetail(GridifyQuery request)
@@ -86,24 +118,10 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
     }
 
-    public async Task CompleteAsync(Guid id, CancellationToken cancellationToken = new())
-    {
-        var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-        if (forgiveness == null)
-            throw new MessageException("شناسه قرعه کشی موجود نمی باشد");
-
-        forgiveness.IsChecked = true;
-
-        Repository.Attach(forgiveness);
-
-        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
-    }
-
     public Paging<ForgivenessDto> ShowHistory(GridifyQuery request)
     {
         var twitches = Repository.Queryable(false)
-            .Select(x=> new ForgivenessDto()
+            .Select(x => new ForgivenessDto()
             {
                 Id = x.Id,
                 Prize = x.Prize,

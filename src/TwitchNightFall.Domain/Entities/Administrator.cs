@@ -38,4 +38,19 @@ public class Administrator : Auditable
     /// کلمه عبور
     /// </summary>
     public string? Password { get; set; }
+    /// <summary>
+    /// ادمین ایجاد کننده
+    /// </summary>
+    public Guid? CreatedBy { get; set; }
+    /// <summary>
+    /// فعال بودن یا نبودن
+    /// </summary>
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// اطلاعات ادمین ایجاد کننده
+    /// </summary>
+    public Administrator? Creator { get; set; }
+
+    public ICollection<Forgiveness> Forgiveness { get; set; }
 }

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Repository.Common;
 

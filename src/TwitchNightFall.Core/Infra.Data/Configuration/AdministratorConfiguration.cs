@@ -26,6 +26,21 @@ public class AdministratorConfiguration : AuditableConfiguration<Administrator>
         builder.Property(x => x.Password)
             .IsRequired();
 
+        builder.Property(x => x.CreatedBy);
+
+        builder.Property(x => x.IsActive)
+            .IsRequired();
+
+        builder.HasOne(x => x.Creator)
+            .WithOne()
+            .HasForeignKey<Administrator>(x => x.CreatedBy)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.Forgiveness)
+            .WithOne()
+            .HasForeignKey(x => x.ModifiedBy)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasIndex(x => x.Username, "IX_Administrator_Username")
             .IsUnique();
 
@@ -40,7 +55,9 @@ public class AdministratorConfiguration : AuditableConfiguration<Administrator>
                 Lastname = "admin",
                 ProfileImageUrl = null,
                 CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow
+                ModifiedAt = DateTime.UtcNow,
+                CreatedBy = null,
+                IsActive = true
             }
         });
     }

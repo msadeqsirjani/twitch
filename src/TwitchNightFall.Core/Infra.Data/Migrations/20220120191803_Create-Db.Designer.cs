@@ -12,8 +12,8 @@ using TwitchNightFall.Core.Infra.Data;
 namespace TwitchNightFall.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220120065556_Update-Database-1")]
-    partial class UpdateDatabase1
+    [Migration("20220120191803_Create-Db")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,9 +33,15 @@ namespace TwitchNightFall.Core.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Firstname")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
                         .HasMaxLength(250)
@@ -58,6 +64,10 @@ namespace TwitchNightFall.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedBy")
+                        .IsUnique()
+                        .HasFilter("[CreatedBy] IS NOT NULL");
+
                     b.HasIndex(new[] { "Username" }, "IX_Administrator_Username")
                         .IsUnique();
 
@@ -67,10 +77,11 @@ namespace TwitchNightFall.Core.Migrations
                         new
                         {
                             Id = new Guid("c0915809-b937-4e84-b7ba-97efcf9af77c"),
-                            CreatedAt = new DateTime(2022, 1, 20, 6, 55, 56, 576, DateTimeKind.Utc).AddTicks(8514),
+                            CreatedAt = new DateTime(2022, 1, 20, 19, 18, 3, 109, DateTimeKind.Utc).AddTicks(5419),
                             Firstname = "admin",
+                            IsActive = true,
                             Lastname = "admin",
-                            ModifiedAt = new DateTime(2022, 1, 20, 6, 55, 56, 576, DateTimeKind.Utc).AddTicks(8517),
+                            ModifiedAt = new DateTime(2022, 1, 20, 19, 18, 3, 109, DateTimeKind.Utc).AddTicks(5421),
                             Password = "0LfMrUOaFgd0CpvCf0oVBg==",
                             Username = "admin"
                         });
@@ -82,6 +93,9 @@ namespace TwitchNightFall.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AdministratorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -91,6 +105,9 @@ namespace TwitchNightFall.Core.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Prize")
                         .HasColumnType("int");
 
@@ -98,6 +115,10 @@ namespace TwitchNightFall.Core.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdministratorId");
+
+                    b.HasIndex("ModifiedBy");
 
                     b.HasIndex("TwitchId");
 
@@ -129,15 +150,41 @@ namespace TwitchNightFall.Core.Migrations
                     b.ToTable("Twitch", "ray");
                 });
 
+            modelBuilder.Entity("TwitchNightFall.Domain.Entities.Administrator", b =>
+                {
+                    b.HasOne("TwitchNightFall.Domain.Entities.Administrator", "Creator")
+                        .WithOne()
+                        .HasForeignKey("TwitchNightFall.Domain.Entities.Administrator", "CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Forgiveness", b =>
                 {
+                    b.HasOne("TwitchNightFall.Domain.Entities.Administrator", "Administrator")
+                        .WithMany()
+                        .HasForeignKey("AdministratorId");
+
+                    b.HasOne("TwitchNightFall.Domain.Entities.Administrator", null)
+                        .WithMany("Forgiveness")
+                        .HasForeignKey("ModifiedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TwitchNightFall.Domain.Entities.Twitch", "Twitch")
                         .WithMany("Forgiveness")
                         .HasForeignKey("TwitchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Administrator");
+
                     b.Navigation("Twitch");
+                });
+
+            modelBuilder.Entity("TwitchNightFall.Domain.Entities.Administrator", b =>
+                {
+                    b.Navigation("Forgiveness");
                 });
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Twitch", b =>

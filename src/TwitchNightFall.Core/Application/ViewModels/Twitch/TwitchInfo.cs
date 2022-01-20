@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TwitchNightFall.Core.Application.ViewModels;
+namespace TwitchNightFall.Core.Application.ViewModels.Twitch;
 
 public class TwitchInfo
 {

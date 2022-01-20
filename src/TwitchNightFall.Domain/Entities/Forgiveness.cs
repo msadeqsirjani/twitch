@@ -19,6 +19,8 @@ public class Forgiveness : Auditable
     public Guid TwitchId { get; set; }
     public int Prize { get; set; }
     public bool IsChecked { get; set; }
+    public Guid? ModifiedBy { get; set; }
 
     public Twitch Twitch { get; set; }
+    public Administrator? Administrator { get; set; }
 }

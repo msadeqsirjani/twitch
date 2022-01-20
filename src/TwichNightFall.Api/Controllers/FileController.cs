@@ -21,7 +21,7 @@ namespace TwitchNightFall.Api.Controllers
         /// </summary>
         /// <param name="filename">عنوان فایلی که در خروجی فایل آپلود به کاربر داده می شود</param>
         /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(byte[]))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]

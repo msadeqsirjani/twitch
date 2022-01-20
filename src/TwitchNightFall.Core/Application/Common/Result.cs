@@ -22,6 +22,7 @@ public class Result
 
     public static Result WithSuccess() => new(ResultMode.Success, null, null);
     public static Result WithSuccess(dynamic value) => new(ResultMode.Success, value, null);
+    public static Result WithSuccess(dynamic value, string message) => new(ResultMode.Success, value, message);
     public static Result WithSuccess(string message) => new(ResultMode.Success, null, message);
     public static Result WithMessage(string message) => new(ResultMode.Message, null, message);
     public static Result WithException() => new(ResultMode.Exception, null, null);

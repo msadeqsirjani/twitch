@@ -48,8 +48,8 @@ public class TwitchController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Forgiveness(Guid twitchAccountId, int prize)
     {
-        await _forgivenessService.AddAsync(twitchAccountId, prize);
+        var result = await _forgivenessService.Forgiveness(twitchAccountId, prize);
 
-        return Ok(Result.WithSuccess(Statement.Success));
+        return Ok(result);
     }
 }

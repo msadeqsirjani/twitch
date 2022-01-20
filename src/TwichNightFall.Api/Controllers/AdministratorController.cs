@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
-using TwitchNightFall.Domain.Entities;
+using TwitchNightFall.Core.Application.ViewModels.Administrator;
 
 namespace TwitchNightFall.Api.Controllers
 {
@@ -37,7 +37,28 @@ namespace TwitchNightFall.Api.Controllers
         {
             var result = await _administratorService.LoginAsync(username, password);
 
-            return Ok(Result.WithSuccess(result));
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// افزودن ادمیت جدید به سیستم
+        /// </summary>
+        /// <param name="administrator"></param>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddAdministrator([FromBody] AdministratorDto administrator)
+        {
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            administrator.CreatedBy = Guid.Parse(userId!);
+
+            var result = await _administratorService.AddAdministrator(administrator);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -55,7 +76,7 @@ namespace TwitchNightFall.Api.Controllers
 
             var result = await _administratorService.ShowProfileAsync(Guid.Parse(userId!), HttpContext);
 
-            return Ok(Result.WithSuccess(result));
+            return Ok(result);
         }
 
         /// <summary>
@@ -68,15 +89,15 @@ namespace TwitchNightFall.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SaveAdminProfile([FromBody] Administrator administrator)
+        public async Task<IActionResult> SaveAdminProfile([FromBody] AdministratorDto administrator)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             administrator.Id = Guid.Parse(userId!);
 
-            await _administratorService.SaveProfileAsync(administrator);
+            var result = await _administratorService.SaveProfileAsync(administrator);
 
-            return Ok(Result.WithSuccess(Statement.Success));
+            return Ok(result);
         }
 
         /// <summary>
@@ -142,9 +163,11 @@ namespace TwitchNightFall.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Complete(Guid forgivenessId)
         {
-            await _forgivenessService.CompleteAsync(forgivenessId);
+            var administrator = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            return Ok(Result.WithSuccess(Statement.Success));
+            var result = await _forgivenessService.CompleteAsync(forgivenessId, Guid.Parse(administrator!));
+
+            return Ok(result);
         }
     }
 }

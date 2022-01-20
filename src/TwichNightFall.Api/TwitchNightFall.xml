@@ -12,13 +12,20 @@
             <param name="password">کلمه عبور ادمین</param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.AddAdministrator(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
+            <summary>
+            افزودن ادمیت جدید به سیستم
+            </summary>
+            <param name="administrator"></param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowAdminProfile">
             <summary>
             مشاهده پروفایل ادمین
             </summary>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveAdminProfile(TwitchNightFall.Domain.Entities.Administrator)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveAdminProfile(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
             <summary>
             ویرایش پروفایل ادمین
             </summary>
