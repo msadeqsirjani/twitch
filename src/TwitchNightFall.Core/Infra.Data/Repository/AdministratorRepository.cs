@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TwitchNightFall.Core.Infra.Data.Common;
+using TwitchNightFall.Domain.Entities;
+using TwitchNightFall.Domain.Repository;
 
-namespace TwitchNightFall.Core.Infra.Data.Repository
+namespace TwitchNightFall.Core.Infra.Data.Repository;
+
+public class AdministratorRepository : RepositoryAsync<Administrator>, IAdministratorRepository
 {
-    internal class AdministratorRepository
+    public AdministratorRepository(ApplicationDbContext context) : base(context)
     {
     }
 }
