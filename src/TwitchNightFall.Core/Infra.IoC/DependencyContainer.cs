@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Extensions;
 using TwitchNightFall.Core.Application.Services;
@@ -93,7 +94,7 @@ public static class DependencyContainer
                         }
                         catch
                         {
-                            throw new UnAuthorizedException("احراز هویت کاربر با مشکل مواجه شده است");
+                            throw new UnAuthorizedException(Statement.UnAuthorized);
                         }
                     }
                 };

@@ -46,7 +46,7 @@ namespace TwitchNightFall.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ShowProfile()
+        public async Task<IActionResult> ShowAdminProfile()
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -65,7 +65,7 @@ namespace TwitchNightFall.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SaveProfile([FromBody] Administrator administrator)
+        public async Task<IActionResult> SaveAdminProfile([FromBody] Administrator administrator)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -86,9 +86,9 @@ namespace TwitchNightFall.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ShowTwitchDetail(string username)
+        public async Task<IActionResult> ShowTwitchProfile(string username)
         {
-            var result = await _twitchService.GetTwitchAccountData(username);
+            var result = await _twitchService.ShowTwitchProfile(username);
 
             return Ok(Result.WithSuccess(result!));
         }

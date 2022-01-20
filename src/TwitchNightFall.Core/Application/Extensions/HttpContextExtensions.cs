@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Exceptions;
 
 namespace TwitchNightFall.Core.Application.Extensions;
@@ -16,6 +17,6 @@ public static class HttpContextExtensions
 
         token = authorizationHeader?["Bearer ".Length..];
 
-        return token ?? throw new UnAuthorizedException("احراز هویت کاربر با مشکل مواجه شد");
+        return token ?? throw new UnAuthorizedException(Statement.UnAuthorized);
     }
 }

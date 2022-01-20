@@ -11,7 +11,7 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface ITwitchService : IServiceAsync<Twitch>
 {
     Task<Guid> AddAsync(string username, CancellationToken cancellationToken = new());
-    Task<TwitchInfo?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new());
+    Task<TwitchInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
     Task<bool> IsTwitchAccountAvailable(string username, CancellationToken cancellationToken = new());
 }
 
@@ -50,7 +50,7 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         return twitchAccount.Id;
     }
 
-    public async Task<TwitchInfo?> GetTwitchAccountData(string username, CancellationToken cancellationToken = new())
+    public async Task<TwitchInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new())
     {
         var request = new HttpRequestMessage
         {
@@ -74,6 +74,6 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
 
     public async Task<bool> IsTwitchAccountAvailable(string username, CancellationToken cancellationToken = new())
     {
-        return await GetTwitchAccountData(username, cancellationToken) != null;
+        return await ShowTwitchProfile(username, cancellationToken) != null;
     }
 }
