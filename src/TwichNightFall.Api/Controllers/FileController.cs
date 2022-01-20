@@ -6,7 +6,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class FileController : ControllerBase
     {
         private readonly IFileService _fileService;

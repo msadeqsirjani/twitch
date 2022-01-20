@@ -6,7 +6,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-[Route("[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 public class TwitchController : ControllerBase
 {
     private readonly ITwitchService _twitchService;

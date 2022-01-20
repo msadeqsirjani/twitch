@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AspNetCoreRateLimit;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,6 +33,9 @@ public static class DependencyContainer
     {
         services.AddControllers().AddFluentValidation();
 
+        services.AddOptions();
+        services.AddMemoryCache();
+
         services.AddTransient<IValidator<AdministratorDto>, AdministratorDtoValidator>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -55,6 +59,10 @@ public static class DependencyContainer
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
+        services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+
+        services.AddInMemoryRateLimiting();
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
         services.AddHttpClient();
 
@@ -154,6 +162,7 @@ public static class DependencyContainer
 
     public static void UseApplications(this WebApplication application)
     {
+        application.UseIpRateLimiting();
         application.UseMiddleware<ExceptionHandler>();
         application.UseSwagger();
         application.UseSwaggerUI(options =>
