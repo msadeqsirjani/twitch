@@ -32,5 +32,6 @@ public class Result
 public class Statement
 {
     public const string Success = "عملیات با موفقیت انجام شد";
+    public const string UnAuthorized = "احراز هویت کاربر با خطا همراه شد";
     public const string Failure = "در اجرا عملیات خطایی رخ داده است";
 }

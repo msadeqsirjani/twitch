@@ -4,5 +4,62 @@
         <name>TwitchNightFall.Api</name>
     </assembly>
     <members>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Login(System.String,System.String)">
+            <summary>
+            ورود ادمین به سیستم
+            </summary>
+            <param name="username">نام کاربری ادمین</param>
+            <param name="password">کلمه عبور ادمین</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowProfile">
+            <summary>
+            مشاهده پروفایل ادمین
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveProfile(TwitchNightFall.Domain.Entities.Administrator)">
+            <summary>
+            ویرایش پروفایل ادمین
+            </summary>
+            <param name="administrator">مدل ورودی جهت ویرایش پروفایل ادمین</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchDetail(System.String)">
+            <summary>
+            مشاهده اطلاعات صفحه توییچ
+            </summary>
+            <param name="username">نام کاربری توییچ شرکت کننده در قرعه کشی</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.FileController.Download(System.String)">
+            <summary>
+            دانلود تصاویر پروفایل ادمین
+            </summary>
+            <param name="filename">عنوان فایلی که در خروجی فایل آپلود به کاربر داده می شود</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.FileController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            آپلود تصاویر پروفایل ادمین
+            </summary>
+            <param name="file">فایل جهت آپلود شدن در فایل سرور</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
+            <summary>
+            بررسی وجود نام کاربری معادل در توییچ و ایجاد اکانت جهت استفاده از گردونه شانس
+            </summary>
+            <param name="username">نام کابری کابر شرکت کننده در قرعه کشی گردونه شانس</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Forgiveness(System.Guid,System.Int32)">
+            <summary>
+            ذخیره و بررسی گردونه شانس دنبال شوندگان
+            </summary>
+            <param name="twitchAccountId">شناسه اکانت های ایجاد شده در مرحله ثببت نام در گردونه شانس</param>
+            <param name="prize">تعداد دنبال کنندگانی که در این قرعه کشی برنده شده است این عدد تنها بین 1 تا 5 می باشد</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

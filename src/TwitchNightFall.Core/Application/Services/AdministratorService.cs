@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Http;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
@@ -11,6 +12,8 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IAdministratorService : IServiceAsync<Administrator>
 {
     Task<JwtTokenDto> LoginAsync(string username, string password, CancellationToken cancellationToken = new());
+    Task<Administrator> ShowProfileAsync(Guid id, HttpContext context, CancellationToken cancellationToken = new());
+    Task SaveProfileAsync(Administrator administratorDto, CancellationToken cancellationToken = new());
 }
 
 public class AdministratorService : ServiceAsync<Administrator>, IAdministratorService
@@ -36,14 +39,18 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         return await _jwtService.GenerateJwtToken(administrator.Id, administrator.Username!);
     }
 
-    public async Task<Administrator> ShowProfileAsync(Guid id, CancellationToken cancellationToken = new())
+    public async Task<Administrator> ShowProfileAsync(Guid id, HttpContext context, CancellationToken cancellationToken = new())
     {
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (administrator == null)
             throw new MessageException("حسابی با چنین مشخصاتی یافت نشد");
 
-        return new Administrator(administrator.Firstname, administrator.Lastname, administrator.ProfileImageUrl,
+        var profileImageUrl = string.IsNullOrEmpty(administrator.ProfileImageUrl) 
+            ?  null 
+            : (context.Request.IsHttps ? "https" : "http") + $"://{context.Request.Host}/File/Download?filename={administrator.ProfileImageUrl}";
+
+        return new Administrator(administrator.Firstname, administrator.Lastname, profileImageUrl,
             administrator.Username, Security.Decrypt(administrator.Password!))
         {
             Id = administrator.Id,
@@ -52,7 +59,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         };
     }
 
-    public async Task AttachProfileAsync(Administrator administratorDto, CancellationToken cancellationToken = new())
+    public async Task SaveProfileAsync(Administrator administratorDto, CancellationToken cancellationToken = new())
     {
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Id == administratorDto.Id, cancellationToken);
 
