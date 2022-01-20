@@ -39,6 +39,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.MoreDetails(Gridify.GridRequest)">
+            <summary>
+            تاریخچه سوابق نتایج قرعه کشی شرکت کننده
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Check(System.Guid)">
             <summary>
             با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود

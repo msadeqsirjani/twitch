@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Gridify;
+using Gridify.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -109,9 +110,26 @@ namespace TwitchNightFall.Api.Controllers
         [Authorize]
         public IActionResult Monitor([FromBody] GridRequest request)
         {
-            var result = _forgivenessService.MonitorAsync(request);
+            var result = _forgivenessService.Monitor(request);
 
             return Ok(Result.WithSuccess(result));
+        }
+
+        /// <summary>
+        /// تاریخچه سوابق نتایج قرعه کشی شرکت کننده
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+        [HttpPost]
+        [Authorize]
+        public IActionResult MoreDetails([FromBody] GridRequest request)
+        {
+            var result = _forgivenessService.MoreDetails(request);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -119,7 +137,7 @@ namespace TwitchNightFall.Api.Controllers
         /// </summary>
         /// <param name="forgivenessId"></param>
         /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(ServiceResult))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]

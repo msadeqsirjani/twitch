@@ -1,4 +1,5 @@
 ﻿using Gridify;
+using Gridify.Result;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TwitchNightFall.Core.Application.Exceptions;
@@ -12,8 +13,9 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
     Task AddAsync(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
-    IEnumerable<MonitorTwitch> MonitorAsync(GridRequest request);
+    IEnumerable<MonitorTwitch> Monitor(GridRequest request);
     Task CheckAsync(Guid id, CancellationToken cancellationToken = new());
+    ServiceResult MoreDetails(GridRequest request);
 }
 
 public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
@@ -55,7 +57,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<MonitorTwitch> MonitorAsync(GridRequest request)
+    public IEnumerable<MonitorTwitch> Monitor(GridRequest request)
     {
         var twitches = Repository.Queryable(false)
             .Include(x => x.Twitch)
@@ -88,8 +90,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
     }
 
-
-    public async Task CheckAsync(Guid id ,CancellationToken  cancellationToken = new())
+    public async Task CheckAsync(Guid id, CancellationToken cancellationToken = new())
     {
         var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -101,5 +102,17 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         Repository.Attach(forgiveness);
 
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
+    }
+
+    public ServiceResult MoreDetails(GridRequest request)
+    {
+        var twitches = Repository.Queryable(false)
+            .OrderByDescending(x => x.IsChecked)
+            .ThenByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.ModifiedAt)
+            .Gridify(request)
+            .InitSchema<ForgivenessDto>(request);
+
+        return twitches;
     }
 }
