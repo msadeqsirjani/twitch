@@ -31,7 +31,7 @@ namespace TwitchNightFall.Api.Controllers
         {
             var content = await _fileService.DownloadAsync(filename);
 
-            return File(content, ContentTypeHelper.GetContentType(filename));
+            return File(content, ContentHelper.ToContentType(filename));
         }
 
         /// <summary>

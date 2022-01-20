@@ -8,5 +8,5 @@ public class MonitorTwitch
     public Guid? TwitchId { get; set; }
     public string? Username { get; set; }
     public int TotalPrize { get; set; }
-    public ICollection<Forgiveness> Forgiveness { get; set; }
+    public IEnumerable<Forgiveness> Forgiveness { get; set; }
 }

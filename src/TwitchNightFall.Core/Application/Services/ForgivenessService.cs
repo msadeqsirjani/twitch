@@ -12,7 +12,8 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
     Task AddAsync(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
-    IEnumerable<MonitorTwitch> ShowAsync(GridRequest request);
+    IEnumerable<MonitorTwitch> MonitorAsync(GridRequest request);
+    Task CheckAsync(Guid id, CancellationToken cancellationToken = new());
 }
 
 public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
@@ -54,22 +55,51 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<MonitorTwitch> ShowAsync(GridRequest request)
+    public IEnumerable<MonitorTwitch> MonitorAsync(GridRequest request)
     {
         var twitches = Repository.Queryable(false)
             .Include(x => x.Twitch)
+            .Select(x => x.TwitchId)
+            .Distinct()
+            .Select(twitchId => new
+            {
+                TwitchId = twitchId,
+                Forgiveness = Repository.Queryable(false)
+                    .Where(y => y.TwitchId == twitchId && EF.Functions.DateDiffDay(y.CreatedAt, DateTime.UtcNow) == 0)
+                    .OrderByDescending(y => y.IsChecked)
+                    .ThenByDescending(x => x.CreatedAt)
+                    .ThenByDescending(y => y.ModifiedAt)
+                    .ToList()
+            })
+            .Select(x => new MonitorTwitch
+            {
+                Id = x.Forgiveness.Single().Id,
+                TwitchId = x.TwitchId,
+                Username = x.Forgiveness.Single().Twitch.Username,
+                TotalPrize = x.Forgiveness.Sum(y => y.Prize),
+                Forgiveness = x.Forgiveness
+            })
+            .AsQueryable()
             .ApplyFiltering(request)
             .ApplyOrdering(request)
-            .ApplyPaging(request)
-            .Select(x=> new MonitorTwitch()
-            {
-                Id = x.Id,
-                TwitchId = x.TwitchId,
-                Username = x.Twitch.Username,
-                TotalPrize = x.Prize
-            });
+            .ApplyPaging(request);
 
         return twitches;
 
+    }
+
+
+    public async Task CheckAsync(Guid id ,CancellationToken  cancellationToken = new())
+    {
+        var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (forgiveness == null)
+            throw new MessageException("شناسه قرعه کشی موجود نمی باشد");
+
+        forgiveness.IsChecked = true;
+
+        Repository.Attach(forgiveness);
+
+        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace TwitchNightFall.Core.Application.Common;
 
-public class ContentTypeHelper
+public static class ContentHelper
 {
-    public static string GetContentType(string filename)
+    public static string ToContentType(string filename)
     {
         var fileExtension = Path.GetExtension(filename).ToLower();
 

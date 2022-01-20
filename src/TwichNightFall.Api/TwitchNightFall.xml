@@ -12,24 +12,38 @@
             <param name="password">کلمه عبور ادمین</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowProfile">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowAdminProfile">
             <summary>
             مشاهده پروفایل ادمین
             </summary>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveProfile(TwitchNightFall.Domain.Entities.Administrator)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveAdminProfile(TwitchNightFall.Domain.Entities.Administrator)">
             <summary>
             ویرایش پروفایل ادمین
             </summary>
             <param name="administrator">مدل ورودی جهت ویرایش پروفایل ادمین</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchDetail(System.String)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchProfile(System.String)">
             <summary>
             مشاهده اطلاعات صفحه توییچ
             </summary>
             <param name="username">نام کاربری توییچ شرکت کننده در قرعه کشی</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Monitor(Gridify.GridRequest)">
+            <summary>
+            مشاهده اطلاعات افرادی که در طول روز در قرعه کشی شرکت کرده اند و نمایش تعداد دنبال کنندگانی که برنده به دست آورده اند  
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Check(System.Guid)">
+            <summary>
+            با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود
+            </summary>
+            <param name="forgivenessId"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.FileController.Download(System.String)">

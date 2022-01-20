@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using Gridify;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
@@ -13,11 +15,13 @@ namespace TwitchNightFall.Api.Controllers
     {
         private readonly IAdministratorService _administratorService;
         private readonly ITwitchService _twitchService;
+        private readonly IForgivenessService _forgivenessService;
 
-        public AdministratorController(IAdministratorService administratorService, ITwitchService twitchService)
+        public AdministratorController(IAdministratorService administratorService, ITwitchService twitchService, IForgivenessService forgivenessService)
         {
             _administratorService = administratorService;
             _twitchService = twitchService;
+            _forgivenessService = forgivenessService;
         }
 
         /// <summary>
@@ -91,6 +95,40 @@ namespace TwitchNightFall.Api.Controllers
             var result = await _twitchService.ShowTwitchProfile(username);
 
             return Ok(Result.WithSuccess(result!));
+        }
+
+        /// <summary>
+        /// مشاهده اطلاعات افرادی که در طول روز در قرعه کشی شرکت کرده اند و نمایش تعداد دنبال کنندگانی که برنده به دست آورده اند  
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+        [HttpPost]
+        [Authorize]
+        public IActionResult Monitor([FromBody] GridRequest request)
+        {
+            var result = _forgivenessService.MonitorAsync(request);
+
+            return Ok(Result.WithSuccess(result));
+        }
+
+        /// <summary>
+        /// با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود
+        /// </summary>
+        /// <param name="forgivenessId"></param>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Check(Guid forgivenessId)
+        {
+            await _forgivenessService.CheckAsync(forgivenessId);
+
+            return Ok(Result.WithSuccess(Statement.Success));
         }
     }
 }

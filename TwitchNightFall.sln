@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Domain", "src\TwitchNightFall.Domain\TwitchNightFall.Domain.csproj", "{D8C9C647-958C-49DC-9757-4F116CA7115F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Domain", "src\TwitchNightFall.Domain\TwitchNightFall.Domain.csproj", "{D8C9C647-958C-49DC-9757-4F116CA7115F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Api", "src\TwichNightFall.Api\TwitchNightFall.Api.csproj", "{5BC5ED1C-B71E-49DD-BC0F-469BEEB494E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Api", "src\TwichNightFall.Api\TwitchNightFall.Api.csproj", "{5BC5ED1C-B71E-49DD-BC0F-469BEEB494E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Core", "src\TwitchNightFall.Core\TwitchNightFall.Core.csproj", "{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Core", "src\TwitchNightFall.Core\TwitchNightFall.Core.csproj", "{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gridify", "src\Gridify\Gridify.csproj", "{85505BC5-DEFB-420C-B4FB-9ED9C76F7302}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85505BC5-DEFB-420C-B4FB-9ED9C76F7302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85505BC5-DEFB-420C-B4FB-9ED9C76F7302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85505BC5-DEFB-420C-B4FB-9ED9C76F7302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85505BC5-DEFB-420C-B4FB-9ED9C76F7302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
