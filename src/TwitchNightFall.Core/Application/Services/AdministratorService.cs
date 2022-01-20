@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;

@@ -6,9 +6,9 @@ namespace Gridify;
 
 public class GridRequest
 {
-    public IEnumerable<FilterList> Filters { get; set; }
+    public List<FilterList> Filters { get; set; }
 
-    public IEnumerable<Order.Order> Orders { get; set; }
+    public List<Order.Order> Orders { get; set; }
 
     public Pagination Pagination { get; set; }
 

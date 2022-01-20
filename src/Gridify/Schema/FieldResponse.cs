@@ -25,7 +25,7 @@ public class FieldResponse
     public bool IsClickable { get; set; }
     public int Sequence { get; set; }
     public string DataType { get; set; }
-    public FilterResponse Filter { get; set; }
+    public List<FilterResponse> Filters { get; set; } = new();
     public List<OrderResponse> Orders { get; set; } = new();
 
     public FieldResponse FillFieldResponse(List<IMeta> metas)
@@ -73,29 +73,38 @@ public class FieldResponse
                     IsClickable = ((MetaClickable)meta).IsClickable;
                     break;
                 case nameof(MetaOrder):
-                {
-                    var metaOrder = (MetaOrder)meta;
-                    if (!Orders.Any(x => x.Direction == metaOrder.Direction && x.OrderBy == metaOrder.OrderBy))
                     {
-                        Orders.Add(new OrderResponse
+                        var metaOrder = (MetaOrder)meta;
+                        if (!Orders.Any(x => x.Direction == metaOrder.Direction && x.OrderBy == metaOrder.OrderBy))
                         {
-                            OrderBy = metaOrder.OrderBy,
-                            Direction = metaOrder.Direction
-                        });
-                    }
+                            Orders.Add(new OrderResponse
+                            {
+                                OrderBy = metaOrder.OrderBy,
+                                Direction = metaOrder.Direction
+                            });
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case nameof(MetaFilter):
-                    Filter = new FilterResponse
                     {
-                        DataType = ((MetaFilter)meta).DataType,
-                        Fullname = ((MetaFilter)meta).Fullname,
-                        Key = ((MetaFilter)meta).Key,
-                        Assembly = ((MetaFilter)meta).Assembly,
-                        Operator = ((MetaFilter)meta).Operator,
-                    };
-                    break;
+                        var filter = new FilterResponse
+                        {
+                            DataType = ((MetaFilter)meta).DataType,
+                            Fullname = ((MetaFilter)meta).Fullname,
+                            Key = ((MetaFilter)meta).Key,
+                            Assembly = ((MetaFilter)meta).Assembly,
+                            Operator = ((MetaFilter)meta).Operator,
+                        };
+
+                        if (!Filters.Any(x =>
+                                x.Key == filter.Key && x.Operator == filter.Operator && x.DataType == filter.DataType))
+                        {
+                            Filters.Add(filter);
+                        }
+
+                        break;
+                    }
             }
         });
 

@@ -35,9 +35,9 @@ public class ServiceResult
 
     public ServiceResult InitSchema<TReturn>(GridRequest request) where TReturn : IGridResponse, new()
     {
-        Schema = request.Schema;
+        Schema = request?.Schema ?? false;
 
-        if (request.Pagination != null && Pagination != null && request.Pagination.Validate())
+        if (request?.Pagination != null && Pagination != null && request.Pagination.Validate())
             Pagination.TotalPage = Pagination.TotalRow % request.Pagination.PageSize == 0
                 ? Pagination.TotalRow / request.Pagination.PageSize
                 : Pagination.TotalRow / request.Pagination.PageSize + 1;

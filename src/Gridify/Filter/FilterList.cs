@@ -6,5 +6,5 @@ public class FilterList
 {
     public FilterLogic Logic { get; set; }
 
-    public IEnumerable<Filter> Filters { get; set; }
+    public List<Filter> Filters { get; set; }
 }

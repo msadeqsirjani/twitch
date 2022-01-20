@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
 using Gridify;
-using Gridify.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
@@ -103,16 +101,16 @@ namespace TwitchNightFall.Api.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Paging<>))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
-        [HttpPost]
+        [HttpGet]
         [Authorize]
-        public IActionResult Monitor([FromBody] GridRequest request)
+        public IActionResult ShowDetail([FromQuery] GridifyQuery request)
         {
-            var result = _forgivenessService.Monitor(request);
+            var result = _forgivenessService.ShowDetail(request);
 
-            return Ok(Result.WithSuccess(result));
+            return Ok(result);
         }
 
         /// <summary>
@@ -120,14 +118,14 @@ namespace TwitchNightFall.Api.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Paging<>))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
-        [HttpPost]
+        [HttpGet]
         [Authorize]
-        public IActionResult MoreDetails([FromBody] GridRequest request)
+        public IActionResult ShowHistory([FromQuery] GridifyQuery request)
         {
-            var result = _forgivenessService.MoreDetails(request);
+            var result = _forgivenessService.ShowHistory(request);
 
             return Ok(result);
         }
@@ -137,14 +135,14 @@ namespace TwitchNightFall.Api.Controllers
         /// </summary>
         /// <param name="forgivenessId"></param>
         /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(ServiceResult))]
+        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Check(Guid forgivenessId)
+        public async Task<IActionResult> Complete(Guid forgivenessId)
         {
-            await _forgivenessService.CheckAsync(forgivenessId);
+            await _forgivenessService.CompleteAsync(forgivenessId);
 
             return Ok(Result.WithSuccess(Statement.Success));
         }

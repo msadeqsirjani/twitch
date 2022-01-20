@@ -48,7 +48,7 @@ public static class Extensions
 
     public static IQueryable<T> ApplyPaging<T>(this IQueryable<T> queryable, GridRequest request)
     {
-        if (request.Pagination == null)
+        if (request?.Pagination == null)
             return queryable;
 
         var pagination = request.Pagination;
@@ -61,7 +61,7 @@ public static class Extensions
 
     public static IQueryable<T> ApplyOrdering<T>(this IQueryable<T> queryable, GridRequest request)
     {
-        if (request.Orders == null || !request.Orders.Any())
+        if (request?.Orders == null || !request.Orders.Any())
             return queryable;
 
         for (var i = 0; i < request.Orders.Count(); i++)
@@ -79,7 +79,7 @@ public static class Extensions
 
     public static IQueryable<T> ApplyFiltering<T>(this IQueryable<T> queryable, GridRequest request)
     {
-        if (request.Filters == null || !request.Filters.Any())
+        if (request?.Filters == null || !request.Filters.Any())
             return queryable;
 
         var whereExpression = string.Empty;

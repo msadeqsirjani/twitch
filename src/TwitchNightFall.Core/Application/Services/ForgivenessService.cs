@@ -1,5 +1,4 @@
 ﻿using Gridify;
-using Gridify.Result;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TwitchNightFall.Core.Application.Exceptions;
@@ -13,9 +12,9 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
     Task AddAsync(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
-    IEnumerable<MonitorTwitch> Monitor(GridRequest request);
-    Task CheckAsync(Guid id, CancellationToken cancellationToken = new());
-    ServiceResult MoreDetails(GridRequest request);
+    Task CompleteAsync(Guid id, CancellationToken cancellationToken = new());
+    Paging<MonitorTwitch> ShowDetail(GridifyQuery request);
+    Paging<ForgivenessDto> ShowHistory(GridifyQuery request);
 }
 
 public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
@@ -57,7 +56,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<MonitorTwitch> Monitor(GridRequest request)
+    public Paging<MonitorTwitch> ShowDetail(GridifyQuery request)
     {
         var twitches = Repository.Queryable(false)
             .Include(x => x.Twitch)
@@ -81,16 +80,13 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
                 TotalPrize = x.Forgiveness.Sum(y => y.Prize),
                 Forgiveness = x.Forgiveness
             })
-            .AsQueryable()
-            .ApplyFiltering(request)
-            .ApplyOrdering(request)
-            .ApplyPaging(request);
+            .Gridify(request);
 
         return twitches;
 
     }
 
-    public async Task CheckAsync(Guid id, CancellationToken cancellationToken = new())
+    public async Task CompleteAsync(Guid id, CancellationToken cancellationToken = new())
     {
         var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -104,14 +100,23 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
     }
 
-    public ServiceResult MoreDetails(GridRequest request)
+    public Paging<ForgivenessDto> ShowHistory(GridifyQuery request)
     {
         var twitches = Repository.Queryable(false)
+            .Select(x=> new ForgivenessDto()
+            {
+                Id = x.Id,
+                Prize = x.Prize,
+                TwitchId = x.TwitchId,
+                Username = x.Twitch.Username,
+                CreatedAt = x.CreatedAt,
+                IsChecked = x.IsChecked,
+                ModifiedAt = x.ModifiedAt
+            })
             .OrderByDescending(x => x.IsChecked)
             .ThenByDescending(x => x.CreatedAt)
             .ThenByDescending(x => x.ModifiedAt)
-            .Gridify(request)
-            .InitSchema<ForgivenessDto>(request);
+            .Gridify(request);
 
         return twitches;
     }

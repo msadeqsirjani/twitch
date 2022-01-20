@@ -32,21 +32,21 @@
             <param name="username">نام کاربری توییچ شرکت کننده در قرعه کشی</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Monitor(Gridify.GridRequest)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowDetail(Gridify.GridifyQuery)">
             <summary>
             مشاهده اطلاعات افرادی که در طول روز در قرعه کشی شرکت کرده اند و نمایش تعداد دنبال کنندگانی که برنده به دست آورده اند  
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.MoreDetails(Gridify.GridRequest)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowHistory(Gridify.GridifyQuery)">
             <summary>
             تاریخچه سوابق نتایج قرعه کشی شرکت کننده
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Check(System.Guid)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Complete(System.Guid)">
             <summary>
             با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود
             </summary>
