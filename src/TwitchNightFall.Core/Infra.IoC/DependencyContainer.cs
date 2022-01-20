@@ -36,6 +36,7 @@ public static class DependencyContainer
         services.AddTransient<ITwitchService, TwitchService>();
         services.AddTransient<IForgivenessService, ForgivenessService>();
         services.AddTransient<IAdministratorRepository, AdministratorRepository>();
+        services.AddTransient<IAdministratorService, AdministratorService>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
