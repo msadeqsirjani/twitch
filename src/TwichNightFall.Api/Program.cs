@@ -13,6 +13,11 @@ builder.Host.UseSerilog((_, configuration) =>
         rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, encoding: Encoding.UTF8);
 });
 
+builder.WebHost
+    .UseKestrel()
+    .UseContentRoot(Directory.GetCurrentDirectory())
+    .UseIISIntegration();
+
 
 builder.Services.AddServices(builder.Configuration);
 
