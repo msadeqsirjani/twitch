@@ -13,7 +13,7 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
-    Task<Result> Forgiveness(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new());
+    Task<Result> Forgiveness(Guid twitchId, int prize, CancellationToken cancellationToken = new());
     Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new());
     Paging<MonitorTwitch> ShowDetail(GridifyQuery request);
     Paging<ForgivenessDto> ShowHistory(GridifyQuery request);
@@ -35,7 +35,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         _options = options.Value;
     }
 
-    public async Task<Result> Forgiveness(Guid twitchAccountId, int prize, CancellationToken cancellationToken = new())
+    public async Task<Result> Forgiveness(Guid twitchId, int prize, CancellationToken cancellationToken = new())
     {
         var isFirstForgiveness = false;
         if (prize is > 5 or < 0)
@@ -44,25 +44,25 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         var now = DateTime.UtcNow;
 
         var count = await Repository.CountAsync(x =>
-            x.TwitchId == twitchAccountId && x.Prize != _options.FollowerGift && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
+            x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
 
         if (count >= _options.FollowerBoundary)
             throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان در روز استفاده کند");
 
-        if (!await _twitchService.ExistsAsync(x => x.Id == twitchAccountId, cancellationToken))
+        if (!await _twitchService.ExistsAsync(x => x.Id == twitchId, cancellationToken))
             throw new MessageException("کاربری با چنین شناسه ای یافت نشد");
 
         Forgiveness forgiveness;
-        if (count == 0)
+        if (!await Repository.ExistsAsync(x => x.TwitchId == twitchId, cancellationToken))
         {
-            forgiveness = new Forgiveness(twitchAccountId, _options.FollowerGift);
+            forgiveness = new Forgiveness(twitchId, _options.FollowerGift);
 
             await Repository.AddAsync(forgiveness, cancellationToken);
 
             isFirstForgiveness = true;
         }
 
-        forgiveness = new Forgiveness(twitchAccountId, prize);
+        forgiveness = new Forgiveness(twitchId, prize);
 
         await Repository.AddAsync(forgiveness, cancellationToken);
 
