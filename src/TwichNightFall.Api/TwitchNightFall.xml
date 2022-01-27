@@ -111,11 +111,18 @@
             <param name="email"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ConfirmResetPassword(System.String)">
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ResetPasswordConfirmation(System.String)">
             <summary>
             تایید بازیابی رمز عبور
             </summary>
             <param name="singleUseCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.EditTwitch(TwitchNightFall.Core.Application.ViewModels.Twitch.TwitchEditDto)">
+            <summary>
+            ویرایش پست الکترونیک و رمز عبور
+            </summary>
+            <param name="twitchEditDto"></param>
             <returns></returns>
         </member>
     </members>
