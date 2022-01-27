@@ -15,6 +15,7 @@ public interface ITwitchService : IServiceAsync<Twitch>
 {
     Task<Result> SignUpAsync(TwitchAddDto twitchAddDto, CancellationToken cancellationToken = new());
     Task<Result> SingInAsync(string username, string password, CancellationToken cancellationToken = new());
+    Task<Result> EditTwitchAsync(TwitchEditDto twitchAddDto, CancellationToken cancellationToken = new());
     Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
     Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new());
 }
@@ -69,7 +70,7 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
     {
         var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
 
-        if(twitch == null)
+        if (twitch == null)
             return Result.WithSuccess("نام کاربری یافت نشد");
 
         if (!Security.Decrypt(twitch.Password!).Equals(password))
@@ -78,6 +79,23 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         var jwtTokenDto = await _jwtService.GenerateJwtToken(twitch.Id, twitch.Username!, false);
 
         return Result.WithSuccess(jwtTokenDto);
+    }
+
+    public async Task<Result> EditTwitchAsync(TwitchEditDto twitchAddDto, CancellationToken cancellationToken = new())
+    {
+        var twitch = await Repository.FirstOrDefaultAsync(x => x.Id == twitchAddDto.Id, cancellationToken);
+
+        if(twitch == null)
+            return Result.WithException("حسابی با این مشخصات یافت نشد");
+
+        twitch.Email = string.IsNullOrEmpty(twitchAddDto.Email) ? twitch.Email : twitchAddDto.Email;
+        twitch.Password = string.IsNullOrEmpty(twitchAddDto.Password) ? twitch.Password : Security.Encrypt(twitchAddDto.Password);
+
+        Repository.Attach(twitch);
+
+        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
+        
+        return Result.WithSuccess(Statement.Success);
     }
 
     public async Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new())

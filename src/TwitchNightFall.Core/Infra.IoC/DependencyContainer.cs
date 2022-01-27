@@ -63,6 +63,7 @@ public static class DependencyContainer
         services.AddTransient<IResetPasswordRepository, ResetPasswordRepository>();
         services.AddTransient<IResetPasswordService, ResetPasswordService>();
         services.AddTransient<IValidator<TwitchAddDto>, TwitchAddDtoValidator>();
+        services.AddTransient<IValidator<TwitchEditDto>, TwitchEditDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));

@@ -116,9 +116,25 @@ public class TwitchController : ControllerBase
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> ConfirmResetPassword(string singleUseCode)
+    public async Task<IActionResult> ResetPasswordConfirmation(string singleUseCode)
     {
         var result = await _resetPasswordService.ShowTwitchAsync(singleUseCode);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// ویرایش پست الکترونیک و رمز عبور
+    /// </summary>
+    /// <param name="twitchEditDto"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> EditTwitch([FromBody] TwitchEditDto twitchEditDto)
+    {
+        var result = await _twitchService.EditTwitchAsync(twitchEditDto);
 
         return Ok(result);
     }
