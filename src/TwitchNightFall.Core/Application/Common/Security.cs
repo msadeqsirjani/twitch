@@ -8,7 +8,7 @@ public static class Security
     private const string PlainText = "C0915809-B937-4E84-B7BA-97EFCF9AF77C";
 
     public static string Encrypt(string text)
-    {
+    { 
         var clearBytes = Encoding.Unicode.GetBytes(text);
         using var aes = Aes.Create();
         var pdb = new Rfc2898DeriveBytes(PlainText,

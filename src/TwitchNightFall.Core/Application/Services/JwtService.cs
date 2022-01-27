@@ -5,16 +5,20 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Migrations;
 
 namespace TwitchNightFall.Core.Application.Services;
 
 public interface IJwtService
 {
-    Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username);
+    Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username, bool administrator);
 }
 
 public class JwtService : IJwtService
 {
+    public const string Administrator = nameof(Administrator);
+    public const string Other = nameof(Other);
+
     private readonly JwtSetting _options;
 
     public JwtService(IOptions<JwtSetting> options)
@@ -22,7 +26,7 @@ public class JwtService : IJwtService
         _options = options.Value;
     }
 
-    public Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username)
+    public Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username, bool administrator)
     {
         var expires = DateTime.UtcNow.AddDays(1);
         var expiry = expires.ToEpochTimeSpan().TotalSeconds.ToInt32();
@@ -30,6 +34,7 @@ public class JwtService : IJwtService
         {
             new(ClaimTypes.Name, username),
             new(ClaimTypes.NameIdentifier, userId.ToString()),
+            new(ClaimTypes.Role, administrator ? Administrator : Other),
             new(ClaimTypes.Expiration, expiry.ToString(CultureInfo.InvariantCulture))
         };
         var secretKey = Encoding.UTF8.GetBytes(_options.IssuerSigningKey);

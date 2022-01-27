@@ -35,7 +35,7 @@ namespace TwitchNightFall.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var result = await _administratorService.LoginAsync(username, password);
+            var result = await _administratorService.SignInAsync(username, password);
 
             return Ok(result);
         }

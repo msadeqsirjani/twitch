@@ -2,7 +2,7 @@
 
 namespace TwitchNightFall.Core.Application.ViewModels.Twitch;
 
-public class TwitchInfo
+public class TwitchHelixInfo
 {
     [JsonProperty("id")]
     public string? Id { get; set; }
@@ -28,8 +28,8 @@ public class TwitchViewModel
 {
     public TwitchViewModel()
     {
-        Data = new List<TwitchInfo>();
+        Data = new List<TwitchHelixInfo>();
     }
 
-    public List<TwitchInfo> Data { get; set; }
+    public List<TwitchHelixInfo> Data { get; set; }
 }

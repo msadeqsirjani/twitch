@@ -18,6 +18,7 @@ using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
 using TwitchNightFall.Core.Application.ViewModels.Administrator;
+using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
@@ -56,6 +57,7 @@ public static class DependencyContainer
         services.AddTransient<IAdministratorService, AdministratorService>();
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IValidator<TwitchAddDto>, TwitchAddDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));

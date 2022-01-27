@@ -11,7 +11,7 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface IAdministratorService : IServiceAsync<Administrator>
 {
-    Task<Result> LoginAsync(string username, string password, CancellationToken cancellationToken = new());
+    Task<Result> SignInAsync(string username, string password, CancellationToken cancellationToken = new());
     Task<Result> AddAdministrator(AdministratorDto administratorDto, CancellationToken cancellationToken = new());
     Task<Result> ShowProfileAsync(Guid id, HttpContext context, CancellationToken cancellationToken = new());
     Task<Result> SaveProfileAsync(AdministratorDto administratorDto, CancellationToken cancellationToken = new());
@@ -30,7 +30,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         _validator = validator;
     }
 
-    public async Task<Result> LoginAsync(string username, string password, CancellationToken cancellationToken = new())
+    public async Task<Result> SignInAsync(string username, string password, CancellationToken cancellationToken = new())
     {
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Username == username && x.IsActive, cancellationToken);
 
@@ -39,7 +39,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         if (!Security.Decrypt(administrator.Password!).Equals(password))
             throw new MessageException("رمز عبور نادرست می باشد");
 
-        var jwtTokenDto = await _jwtService.GenerateJwtToken(administrator.Id, administrator.Username!);
+        var jwtTokenDto = await _jwtService.GenerateJwtToken(administrator.Id, administrator.Username!, true);
 
         return Result.WithSuccess(jwtTokenDto);
     }

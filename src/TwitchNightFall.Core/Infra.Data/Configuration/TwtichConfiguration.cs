@@ -16,6 +16,13 @@ public class TwtichConfiguration : AuditableConfiguration<Twitch>
             .IsRequired()
             .HasMaxLength(250);
 
+        builder.Property(x => x.Email)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(x => x.Password)
+            .IsRequired();
+
         builder.HasMany(x => x.Forgiveness)
             .WithOne(x => x.Twitch)
             .HasForeignKey(x => x.TwitchId)

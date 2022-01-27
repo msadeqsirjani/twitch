@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
+using TwitchNightFall.Core.Application.ViewModels.Twitch;
 
 namespace TwitchNightFall.Api.Controllers;
 
@@ -30,9 +31,9 @@ public class TwitchController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Availability(string username)
     {
-        var twitchAccountId = await _twitchService.AddAsync(username);
+        var result = await _twitchService.IsAvailableTwitch(username);
 
-        return Ok(Result.WithSuccess(twitchAccountId));
+        return Ok(Result.WithSuccess(result));
     }
 
     /// <summary>
@@ -45,10 +46,43 @@ public class TwitchController : ControllerBase
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> Forgiveness(Guid twitchAccountId, int prize)
     {
         var result = await _forgivenessService.Forgiveness(twitchAccountId, prize);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// ثبت نام کاربر
+    /// </summary>
+    /// <param name="twitchAddDto"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> SignUp(TwitchAddDto twitchAddDto)
+    {
+        var result = await _twitchService.SignUpAsync(twitchAddDto);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// ورود کاربر
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> SignIn(string username, string password)
+    {
+        var result = await _twitchService.SingInAsync(username, password);
 
         return Ok(result);
     }
