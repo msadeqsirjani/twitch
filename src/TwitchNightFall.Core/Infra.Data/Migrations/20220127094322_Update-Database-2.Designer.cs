@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitchNightFall.Core.Infra.Data;
 
@@ -11,9 +12,10 @@ using TwitchNightFall.Core.Infra.Data;
 namespace TwitchNightFall.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220127094322_Update-Database-2")]
+    partial class UpdateDatabase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,11 +77,11 @@ namespace TwitchNightFall.Core.Migrations
                         new
                         {
                             Id = new Guid("c0915809-b937-4e84-b7ba-97efcf9af77c"),
-                            CreatedAt = new DateTime(2022, 1, 27, 11, 5, 29, 407, DateTimeKind.Utc).AddTicks(7398),
+                            CreatedAt = new DateTime(2022, 1, 27, 9, 43, 22, 446, DateTimeKind.Utc).AddTicks(8272),
                             Firstname = "admin",
                             IsActive = true,
                             Lastname = "admin",
-                            ModifiedAt = new DateTime(2022, 1, 27, 11, 5, 29, 407, DateTimeKind.Utc).AddTicks(7401),
+                            ModifiedAt = new DateTime(2022, 1, 27, 9, 43, 22, 446, DateTimeKind.Utc).AddTicks(8273),
                             Password = "0LfMrUOaFgd0CpvCf0oVBg==",
                             Username = "admin"
                         });
@@ -121,36 +123,6 @@ namespace TwitchNightFall.Core.Migrations
                     b.HasIndex("TwitchId");
 
                     b.ToTable("Forgiveness", "ray");
-                });
-
-            modelBuilder.Entity("TwitchNightFall.Domain.Entities.ResetPassword", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("Expiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SingleUseCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ResetPassword", "ray");
                 });
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Twitch", b =>

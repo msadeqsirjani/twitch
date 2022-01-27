@@ -4,7 +4,7 @@
         <name>TwitchNightFall.Api</name>
     </assembly>
     <members>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Login(System.String,System.String)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SignIn(System.String,System.String)">
             <summary>
             ورود ادمین به سیستم
             </summary>
@@ -87,6 +87,35 @@
             </summary>
             <param name="twitchAccountId">شناسه اکانت های ایجاد شده در مرحله ثببت نام در گردونه شانس</param>
             <param name="prize">تعداد دنبال کنندگانی که در این قرعه کشی برنده شده است این عدد تنها بین 1 تا 5 می باشد</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.SignUp(TwitchNightFall.Core.Application.ViewModels.Twitch.TwitchAddDto)">
+            <summary>
+            ثبت نام کاربر
+            </summary>
+            <param name="twitchAddDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.SignIn(System.String,System.String)">
+            <summary>
+            ورود کاربر
+            </summary>
+            <param name="username"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ResetPassword(System.String)">
+            <summary>
+            بازیابی رمز عبور
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ConfirmResetPassword(System.String)">
+            <summary>
+            تایید بازیابی رمز عبور
+            </summary>
+            <param name="singleUseCode"></param>
             <returns></returns>
         </member>
     </members>

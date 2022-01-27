@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using AspNetCoreRateLimit;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,7 +31,10 @@ public static class DependencyContainer
 {
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers().AddFluentValidation();
+        services.AddControllers()
+            .AddFluentValidation()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
         services.AddOptions();
         services.AddMemoryCache();
@@ -57,14 +59,15 @@ public static class DependencyContainer
         services.AddTransient<IAdministratorService, AdministratorService>();
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IMailService, MailService>();
+        services.AddTransient<IResetPasswordRepository, ResetPasswordRepository>();
+        services.AddTransient<IResetPasswordService, ResetPasswordService>();
         services.AddTransient<IValidator<TwitchAddDto>, TwitchAddDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
-        services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
-
-        services.AddInMemoryRateLimiting();
-        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+        services.Configure<MailSetting>(configuration.GetSection("MailSetting"));
+        services.Configure<OtpSetting>(configuration.GetSection("OtpSetting"));
 
         services.AddHttpClient();
 
@@ -164,7 +167,6 @@ public static class DependencyContainer
 
     public static void UseApplications(this WebApplication application)
     {
-        application.UseIpRateLimiting();
         application.UseMiddleware<ExceptionHandler>();
         application.UseSwagger();
         application.UseSwaggerUI(options =>

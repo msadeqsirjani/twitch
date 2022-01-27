@@ -38,6 +38,7 @@ public class ExceptionHandler
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 200;
 
+
         switch (exception)
         {
             case MessageException messageException:

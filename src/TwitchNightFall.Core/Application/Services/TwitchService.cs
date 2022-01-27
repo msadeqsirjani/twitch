@@ -51,10 +51,10 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         if (twitch != null)
             throw new MessageException("نام کاربری تکراری می باشد");
 
-        if (!await IsAvailableTwitch(twitch!.Username, cancellationToken))
+        if (!await IsAvailableTwitch(twitchAddDto.Username!, cancellationToken))
             throw new MessageException("نام کاربری معادلی در توییچ یافت نشد");
 
-        twitch = new Twitch(twitchAddDto.Username!, twitch.Email, Security.Encrypt(twitchAddDto.Password!));
+        twitch = new Twitch(twitchAddDto.Username!, twitchAddDto.Email!, Security.Encrypt(twitchAddDto.Password!));
 
         await Repository.AddAsync(twitch, cancellationToken);
 

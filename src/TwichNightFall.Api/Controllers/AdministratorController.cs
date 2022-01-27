@@ -33,7 +33,7 @@ namespace TwitchNightFall.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> SignIn(string username, string password)
         {
             var result = await _administratorService.SignInAsync(username, password);
 

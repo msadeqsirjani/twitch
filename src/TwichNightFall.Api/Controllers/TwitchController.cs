@@ -12,11 +12,15 @@ public class TwitchController : ControllerBase
 {
     private readonly ITwitchService _twitchService;
     private readonly IForgivenessService _forgivenessService;
+    private readonly IMailService _mailService;
+    private readonly IResetPasswordService _resetPasswordService;
 
-    public TwitchController(ITwitchService twitchService, IForgivenessService forgivenessService)
+    public TwitchController(ITwitchService twitchService, IForgivenessService forgivenessService, IMailService mailService, IResetPasswordService resetPasswordService)
     {
         _twitchService = twitchService;
         _forgivenessService = forgivenessService;
+        _mailService = mailService;
+        _resetPasswordService = resetPasswordService;
     }
 
     /// <summary>
@@ -63,7 +67,7 @@ public class TwitchController : ControllerBase
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> SignUp(TwitchAddDto twitchAddDto)
+    public async Task<IActionResult> SignUp([FromBody] TwitchAddDto twitchAddDto)
     {
         var result = await _twitchService.SignUpAsync(twitchAddDto);
 
@@ -83,6 +87,38 @@ public class TwitchController : ControllerBase
     public async Task<IActionResult> SignIn(string username, string password)
     {
         var result = await _twitchService.SingInAsync(username, password);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// بازیابی رمز عبور
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword(string email)
+    {
+        await _mailService.Send(email);
+
+        return Ok(Result.WithSuccess(Statement.Success));
+    }
+
+    /// <summary>
+    /// تایید بازیابی رمز عبور
+    /// </summary>
+    /// <param name="singleUseCode"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmResetPassword(string singleUseCode)
+    {
+        var result = await _resetPasswordService.ShowTwitchAsync(singleUseCode);
 
         return Ok(result);
     }
