@@ -74,6 +74,13 @@
             <param name="file">فایل جهت آپلود شدن در فایل سرور</param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.SubscriptionController.GetSubscriptions(Gridify.GridifyQuery)">
+            <summary>
+            دریافت اطلاعات اشتراک خرید
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
             <summary>
             بررسی وجود نام کاربری معادل در توییچ و ایجاد اکانت جهت استفاده از گردونه شانس

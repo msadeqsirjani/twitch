@@ -9,8 +9,7 @@ using TwitchNightFall.Core.Application.ViewModels.Administrator;
 
 namespace TwitchNightFall.Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    public class AdministratorController : ControllerBase
+    public class AdministratorController : BaseController
     {
         private readonly IAdministratorService _administratorService;
         private readonly ITwitchService _twitchService;

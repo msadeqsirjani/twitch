@@ -7,8 +7,7 @@ using TwitchNightFall.Core.Application.ViewModels.Twitch;
 
 namespace TwitchNightFall.Api.Controllers;
 
-[Route("api/[controller]/[action]")]
-public class TwitchController : ControllerBase
+public class TwitchController : BaseController
 {
     private readonly ITwitchService _twitchService;
     private readonly IForgivenessService _forgivenessService;
