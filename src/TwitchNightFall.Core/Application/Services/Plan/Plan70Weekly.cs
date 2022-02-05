@@ -7,7 +7,7 @@ public class Plan70Weekly : IPlan
     public Plan70Weekly()
     {
         Id = new Guid("8D96397F-A217-43A7-8F9B-91CFF10FD135");
-        Title = "Purchase a subscription of 70 people per week";
+        Title = "Subscription of 70 people per week";
         Price = 2.99;
         Count = 70;
         SubscriptionType = SubscriptionType.PurchaseFollower;

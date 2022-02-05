@@ -6,24 +6,35 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface IPlanService
 {
-    Result ShowPlans(GridifyQuery request);
+    Task<Result> ShowPlansAsync(GridifyQuery request, Guid twitchId, CancellationToken cancellationToken = new());
 }
 
 public class PlanService : IPlanService
 {
-    private readonly List<IPlan> _subscriptions;
+    private readonly List<IPlan> _plans;
+    private readonly ISubscriptionService _subscriptionService;
 
-    public PlanService()
+    public PlanService(ISubscriptionService subscriptionService)
     {
-        _subscriptions = FillSubscriptions();
+        _subscriptionService = subscriptionService;
+        _plans = FillPlans();
     }
 
-    public Result ShowPlans(GridifyQuery request)
+    public async Task<Result> ShowPlansAsync(GridifyQuery request, Guid twitchId, CancellationToken cancellationToken = new())
     {
-        return Result.WithSuccess(_subscriptions.AsQueryable().Gridify(request));
+        var subscription =
+            await _subscriptionService.FirstOrDefaultAsync(
+                x => x.TwitchId == twitchId && x.ExpiredAt >= DateTime.UtcNow, cancellationToken);
+
+        if (subscription == null) return Result.WithSuccess(_plans.AsQueryable().Gridify(request));
+        
+        var plan = _plans.Single(x => x.Id == subscription.PlanId);
+        var message = $"{plan.Title} is active till {subscription.ExpiredAt:D}";
+
+        return Result.WithMessage(message);
     }
 
-    private static List<IPlan> FillSubscriptions()
+    private static List<IPlan> FillPlans()
     {
         return new List<IPlan>
         {

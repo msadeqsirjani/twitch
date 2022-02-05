@@ -7,7 +7,7 @@ public class Plan450Monthly : IPlan
     public Plan450Monthly()
     {
         Id = new Guid("06E71005-69D6-4AD4-B218-7BD47DBEED04");
-        Title = "Purchase a subscription of 450 people per month";
+        Title = "Subscription of 450 people per month";
         Price = 14.49;
         Count = 450;
         SubscriptionType = SubscriptionType.PurchaseFollower;
