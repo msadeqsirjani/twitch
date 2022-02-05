@@ -1,4 +1,4 @@
-﻿using TwitchNightFall.Core.Application.Enums;
+﻿using TwitchNightFall.Domain.Enums;
 
 namespace TwitchNightFall.Core.Application.Services.Plan;
 
@@ -10,8 +10,8 @@ public class Plan140Weekly : IPlan
         Title = "Subscription of 140 people per week";
         Price = 5.49;
         Count = 140;
-        SubscriptionType = SubscriptionType.PurchaseFollower;
-        SubscriptionTime = SubscriptionTime.Weekly;
+        PlanType = PlanType.PurchaseFollower;
+        PlanTime = PlanTime.Weekly;
         DelayBetweenEveryPurchase = 7;
     }
 
@@ -19,7 +19,7 @@ public class Plan140Weekly : IPlan
     public string? Title { get; }
     public double Price { get; }
     public int Count { get; }
-    public SubscriptionType SubscriptionType { get; }
-    public SubscriptionTime SubscriptionTime { get; }
+    public PlanType PlanType { get; }
+    public PlanTime PlanTime { get; }
     public int DelayBetweenEveryPurchase { get; }
 }

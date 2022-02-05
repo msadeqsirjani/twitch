@@ -23,15 +23,18 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 {
     private readonly IUnitOfWorkAsync _unitOfWorkAsync;
     private readonly ITwitchService _twitchService;
+    private readonly ISubscriptionService _subscriptionService;
     private readonly TwitchSetting _options;
 
     public ForgivenessService(IRepositoryAsync<Forgiveness> repository,
         IUnitOfWorkAsync unitOfWorkAsync,
         IOptions<TwitchSetting> options,
-        ITwitchService twitchService) : base(repository)
+        ITwitchService twitchService,
+        ISubscriptionService subscriptionService) : base(repository)
     {
         _unitOfWorkAsync = unitOfWorkAsync;
         _twitchService = twitchService;
+        _subscriptionService = subscriptionService;
         _options = options.Value;
     }
 
@@ -45,6 +48,8 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
         var count = await Repository.CountAsync(x =>
             x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
+
+        var subscription = await _subscriptionService.FirstOrDefaultAsync(x => x.ExpiredAt >= DateTime.UtcNow, cancellationToken);
 
         if (count >= _options.FollowerBoundary)
             throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان در روز استفاده کند");

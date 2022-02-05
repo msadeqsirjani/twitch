@@ -1,4 +1,4 @@
-﻿using TwitchNightFall.Core.Application.Enums;
+﻿using TwitchNightFall.Domain.Enums;
 
 namespace TwitchNightFall.Core.Application.Services.Plan;
 
@@ -8,7 +8,7 @@ public interface IPlan
     string? Title { get; }
     double Price { get; }
     int Count { get; }
-    SubscriptionType SubscriptionType { get; }
-    SubscriptionTime SubscriptionTime { get; }
+    PlanType PlanType { get; }
+    PlanTime PlanTime { get; }
     int DelayBetweenEveryPurchase { get; }
 }
