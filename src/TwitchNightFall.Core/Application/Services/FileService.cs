@@ -1,47 +1,46 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace TwitchNightFall.Core.Application.Services
+namespace TwitchNightFall.Core.Application.Services;
+
+public interface IFileService
 {
-    public interface IFileService
+    Task<byte[]> DownloadAsync(string filename, CancellationToken cancellationToken = new());
+    Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new());
+}
+
+public class FileService : IFileService
+{
+    private readonly IWebHostEnvironment _environment;
+    private const string UploadDirectory = "Uploads/";
+
+    public FileService(IWebHostEnvironment environment)
     {
-        Task<byte[]> DownloadAsync(string filename, CancellationToken cancellationToken = new());
-        Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new());
+        _environment = environment;
     }
 
-    public class FileService : IFileService
+    public Task<byte[]> DownloadAsync(string filename, CancellationToken cancellationToken = new())
     {
-        private readonly IWebHostEnvironment _environment;
-        private const string UploadDirectory = "Uploads/";
+        var path = Path.Combine(_environment.WebRootPath, UploadDirectory);
 
-        public FileService(IWebHostEnvironment environment)
-        {
-            _environment = environment;
-        }
+        var filePath = Path.Combine(path, filename);
 
-        public Task<byte[]> DownloadAsync(string filename, CancellationToken cancellationToken = new())
-        {
-            var path = Path.Combine(_environment.WebRootPath, UploadDirectory);
+        return File.ReadAllBytesAsync(filePath, cancellationToken);
+    }
 
-            var filePath = Path.Combine(path, filename);
+    public async Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new())
+    {
+        var path = Path.Combine(_environment.WebRootPath, UploadDirectory);
 
-            return File.ReadAllBytesAsync(filePath, cancellationToken);
-        }
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
 
-        public async Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new())
-        {
-            var path = Path.Combine(_environment.WebRootPath, UploadDirectory);
+        var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+        var filePath = Path.Combine(path, fileName);
 
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+        await using var stream = File.Create(filePath);
+        await file.CopyToAsync(stream, cancellationToken);
 
-            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(path, fileName);
-
-            await using var stream = File.Create(filePath);
-            await file.CopyToAsync(stream, cancellationToken);
-
-            return fileName;
-        }
+        return fileName;
     }
 }
