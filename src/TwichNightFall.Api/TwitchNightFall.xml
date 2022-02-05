@@ -88,7 +88,7 @@
             <param name="username">نام کابری کابر شرکت کننده در قرعه کشی گردونه شانس</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Forgiveness(System.Guid,System.Int32)">
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Forgiveness(System.Int32)">
             <summary>
             ذخیره و بررسی گردونه شانس دنبال شوندگان
             </summary>

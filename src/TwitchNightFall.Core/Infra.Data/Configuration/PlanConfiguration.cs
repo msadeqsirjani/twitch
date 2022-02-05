@@ -46,7 +46,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 10,
                 PlanType = PlanType.LuckRound,
                 PlanTime = PlanTime.Daily,
-                DelayBetweenEveryPurchase = 5
+                DelayBetweenEveryPurchase = 5,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -56,7 +58,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 140,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Weekly,
-                DelayBetweenEveryPurchase = 7
+                DelayBetweenEveryPurchase = 7,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -66,7 +70,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 150,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Monthly,
-                DelayBetweenEveryPurchase = 30
+                DelayBetweenEveryPurchase = 30,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -76,7 +82,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 175,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Weekly,
-                DelayBetweenEveryPurchase = 7
+                DelayBetweenEveryPurchase = 7,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -86,7 +94,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 20,
                 PlanType = PlanType.LuckRound,
                 PlanTime = PlanTime.Daily,
-                DelayBetweenEveryPurchase = 5
+                DelayBetweenEveryPurchase = 5,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -96,7 +106,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 300,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Monthly,
-                DelayBetweenEveryPurchase = 30
+                DelayBetweenEveryPurchase = 30,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -106,7 +118,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 450,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Monthly,
-                DelayBetweenEveryPurchase = 30
+                DelayBetweenEveryPurchase = 30,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -116,7 +130,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 50,
                 PlanType = PlanType.LuckRound,
                 PlanTime = PlanTime.Daily,
-                DelayBetweenEveryPurchase = 10
+                DelayBetweenEveryPurchase = 10,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             }, 
             new()
             {
@@ -126,7 +142,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 600,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Monthly,
-                DelayBetweenEveryPurchase = 30
+                DelayBetweenEveryPurchase = 30,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -136,7 +154,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 70,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Weekly,
-                DelayBetweenEveryPurchase = 7
+                DelayBetweenEveryPurchase = 7,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             },
             new()
             {
@@ -146,7 +166,9 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
                 Count = 750,
                 PlanType = PlanType.PurchaseFollower,
                 PlanTime = PlanTime.Monthly,
-                DelayBetweenEveryPurchase = 30
+                DelayBetweenEveryPurchase = 30,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             }
         });
     }

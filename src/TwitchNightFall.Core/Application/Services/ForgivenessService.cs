@@ -50,13 +50,13 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         var count = await Repository.CountAsync(x =>
             x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
 
-        var subscription = await _subscriptionService.FirstOrDefaultAsync(
-            x => x.ExpiredAt >= DateTime.UtcNow && x.PlanType == PlanType.LuckRound, cancellationToken);
+        var subscription = await _subscriptionService.GetSubscriptionAsync(
+            x => x.ExpiredAt >= DateTime.UtcNow && x.Plan!.PlanType == PlanType.LuckRound, cancellationToken);
 
         if (subscription != null)
         {
-            if (count >= _options.FollowerBoundary + subscription.Count)
-                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary + subscription.Count } بار می تواند از این امکان در روز استفاده کند");
+            if (count >= _options.FollowerBoundary + subscription.Plan!.Count)
+                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary + subscription.Plan!.Count } بار می تواند از این امکان در روز استفاده کند");
         }
         else
         {

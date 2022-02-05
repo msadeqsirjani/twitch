@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.ViewModels.Twitch;
@@ -50,9 +51,11 @@ public class TwitchController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Forgiveness(Guid twitchAccountId, int prize)
+    public async Task<IActionResult> Forgiveness(int prize)
     {
-        var result = await _forgivenessService.Forgiveness(twitchAccountId, prize);
+        var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var result = await _forgivenessService.Forgiveness(new Guid(twitchId!), prize);
 
         return Ok(result);
     }

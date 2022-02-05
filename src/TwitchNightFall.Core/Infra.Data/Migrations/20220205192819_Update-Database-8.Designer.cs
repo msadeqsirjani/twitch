@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitchNightFall.Core.Infra.Data;
 
@@ -11,9 +12,10 @@ using TwitchNightFall.Core.Infra.Data;
 namespace TwitchNightFall.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220205192819_Update-Database-8")]
+    partial class UpdateDatabase8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,11 +77,11 @@ namespace TwitchNightFall.Core.Migrations
                         new
                         {
                             Id = new Guid("c0915809-b937-4e84-b7ba-97efcf9af77c"),
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(3176),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(1036),
                             Firstname = "admin",
                             IsActive = true,
                             Lastname = "admin",
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(3177),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(1037),
                             Password = "0LfMrUOaFgd0CpvCf0oVBg==",
                             Username = "admin"
                         });
@@ -165,9 +167,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("42a62722-2c58-4f59-a81f-487141a288bb"),
                             Count = 10,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7190),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5084),
                             DelayBetweenEveryPurchase = 5,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7191),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5085),
                             PlanTime = "Daily",
                             PlanType = "LuckRound",
                             Price = 0.99m,
@@ -177,9 +179,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("4b01f654-1410-492c-8b97-bbb9e142b372"),
                             Count = 140,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7196),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5091),
                             DelayBetweenEveryPurchase = 7,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7196),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5091),
                             PlanTime = "Weekly",
                             PlanType = "PurchaseFollower",
                             Price = 5.49m,
@@ -189,9 +191,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("8e5e29eb-2017-4d75-9cf6-7c8b8bf5b9b5"),
                             Count = 150,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7197),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5093),
                             DelayBetweenEveryPurchase = 30,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7198),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5093),
                             PlanTime = "Monthly",
                             PlanType = "PurchaseFollower",
                             Price = 4.99m,
@@ -201,9 +203,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("d2fc0919-e8e6-4ad5-9561-456725280b59"),
                             Count = 175,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7199),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5095),
                             DelayBetweenEveryPurchase = 7,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7199),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5095),
                             PlanTime = "Weekly",
                             PlanType = "PurchaseFollower",
                             Price = 6.49m,
@@ -213,9 +215,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("b55bcaab-901e-4d30-8e82-e5572b84937c"),
                             Count = 20,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7201),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5097),
                             DelayBetweenEveryPurchase = 5,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7201),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5097),
                             PlanTime = "Daily",
                             PlanType = "LuckRound",
                             Price = 1.89m,
@@ -225,9 +227,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("69b933c5-58d1-41d3-8abc-18dc0c5a40f4"),
                             Count = 300,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7204),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5101),
                             DelayBetweenEveryPurchase = 30,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7204),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5101),
                             PlanTime = "Monthly",
                             PlanType = "PurchaseFollower",
                             Price = 9.99m,
@@ -237,9 +239,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("06e71005-69d6-4ad4-b218-7bd47dbeed04"),
                             Count = 450,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7205),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5103),
                             DelayBetweenEveryPurchase = 30,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7206),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5103),
                             PlanTime = "Monthly",
                             PlanType = "PurchaseFollower",
                             Price = 14.49m,
@@ -249,9 +251,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("95df2344-8fb7-4f20-bb51-f1bf1f5618c0"),
                             Count = 50,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7207),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5105),
                             DelayBetweenEveryPurchase = 10,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7207),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5105),
                             PlanTime = "Daily",
                             PlanType = "LuckRound",
                             Price = 3.49m,
@@ -261,9 +263,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("f75a9840-2c97-4f1c-91a0-fd6c68d49f4a"),
                             Count = 600,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7209),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5106),
                             DelayBetweenEveryPurchase = 30,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7209),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5107),
                             PlanTime = "Monthly",
                             PlanType = "PurchaseFollower",
                             Price = 18.99m,
@@ -273,9 +275,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("8d96397f-a217-43a7-8f9b-91cff10fd135"),
                             Count = 70,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7211),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5109),
                             DelayBetweenEveryPurchase = 7,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7211),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5109),
                             PlanTime = "Weekly",
                             PlanType = "PurchaseFollower",
                             Price = 2.99m,
@@ -285,9 +287,9 @@ namespace TwitchNightFall.Core.Migrations
                         {
                             Id = new Guid("5f31bb44-ba41-4cba-97e5-e0152baeb259"),
                             Count = 750,
-                            CreatedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7212),
+                            CreatedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5112),
                             DelayBetweenEveryPurchase = 30,
-                            ModifiedAt = new DateTime(2022, 2, 5, 19, 35, 6, 166, DateTimeKind.Utc).AddTicks(7213),
+                            ModifiedAt = new DateTime(2022, 2, 5, 19, 28, 19, 152, DateTimeKind.Utc).AddTicks(5112),
                             PlanTime = "Monthly",
                             PlanType = "PurchaseFollower",
                             Price = 22.99m,
@@ -331,6 +333,9 @@ namespace TwitchNightFall.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -342,6 +347,9 @@ namespace TwitchNightFall.Core.Migrations
 
                     b.Property<Guid>("PlanId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte>("PlanType")
+                        .HasColumnType("tinyint");
 
                     b.Property<Guid>("TwitchId")
                         .HasColumnType("uniqueidentifier");
