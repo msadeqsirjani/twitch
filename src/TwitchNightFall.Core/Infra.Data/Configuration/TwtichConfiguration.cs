@@ -28,6 +28,11 @@ public class TwtichConfiguration : AuditableConfiguration<Twitch>
             .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(x => x.Subscription)
+            .WithOne(x => x.Twitch)
+            .HasForeignKey(x => x.TwitchId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasIndex(x => x.Username, "IX_TwitchAccount_Username")
             .IsUnique();
     }

@@ -20,5 +20,10 @@ public class SubscriptionConfiguration : AuditableConfiguration<Subscription>
             .WithMany(x => x.Subscription)
             .HasForeignKey(x => x.TwitchId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Plan)
+            .WithMany(x => x.Subscription)
+            .HasForeignKey(x => x.PlanId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

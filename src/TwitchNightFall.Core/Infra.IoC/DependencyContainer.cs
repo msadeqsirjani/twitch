@@ -61,10 +61,11 @@ public static class DependencyContainer
         services.AddTransient<IResetPasswordService, ResetPasswordService>();
         services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
         services.AddTransient<ISubscriptionService, SubscriptionService>();
+        services.AddTransient<IPlanRepository, PlanRepository>();
+        services.AddTransient<IPlanService, PlanService>();
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IMailService, MailService>();
-        services.AddTransient<IPlanService, PlanService>();
         services.AddTransient<IValidator<TwitchAddDto>, TwitchAddDtoValidator>();
         services.AddTransient<IValidator<TwitchEditDto>, TwitchEditDtoValidator>();
 

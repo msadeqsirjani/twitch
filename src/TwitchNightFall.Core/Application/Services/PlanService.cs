@@ -1,23 +1,24 @@
 ﻿using Gridify;
+using Microsoft.EntityFrameworkCore;
 using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Services.Plan;
+using TwitchNightFall.Core.Application.Services.Common;
+using TwitchNightFall.Domain.Entities;
+using TwitchNightFall.Domain.Repository.Common;
 
 namespace TwitchNightFall.Core.Application.Services;
 
-public interface IPlanService
+public interface IPlanService : IServiceAsync<Plan>
 {
     Task<Result> ShowPlansAsync(GridifyQuery request, Guid twitchId, CancellationToken cancellationToken = new());
 }
 
-public class PlanService : IPlanService
+public class PlanService : ServiceAsync<Plan>, IPlanService
 {
-    private readonly List<IPlan> _plans;
     private readonly ISubscriptionService _subscriptionService;
 
-    public PlanService(ISubscriptionService subscriptionService)
+    public PlanService(IRepositoryAsync<Plan> repository, ISubscriptionService subscriptionService) : base(repository)
     {
         _subscriptionService = subscriptionService;
-        _plans = FillPlans();
     }
 
     public async Task<Result> ShowPlansAsync(GridifyQuery request, Guid twitchId, CancellationToken cancellationToken = new())
@@ -26,29 +27,13 @@ public class PlanService : IPlanService
             await _subscriptionService.FirstOrDefaultAsync(
                 x => x.TwitchId == twitchId && x.ExpiredAt >= DateTime.UtcNow, cancellationToken);
 
-        if (subscription == null) return Result.WithSuccess(_plans.AsQueryable().Gridify(request));
+        var plans = Repository.Queryable(false);
+
+        if (subscription == null) return Result.WithSuccess(plans.AsQueryable().Gridify(request));
         
-        var plan = _plans.Single(x => x.Id == subscription.PlanId);
-        var message = $"{plan.Title} is active till {subscription.ExpiredAt:D}";
+        var plan = await plans.SingleOrDefaultAsync(x => x.Id == subscription.PlanId, cancellationToken);
+        var message = $"{plan!.Title} is active till {subscription.ExpiredAt:D}";
 
         return Result.WithMessage(message);
-    }
-
-    private static List<IPlan> FillPlans()
-    {
-        return new List<IPlan>
-        {
-            new Plan750Monthly(),
-            new Plan600Monthly(),
-            new Plan450Monthly(),
-            new Plan300Monthly(),
-            new Plan150Monthly(),
-            new Plan175Weekly(),
-            new Plan140Weekly(),
-            new Plan70Weekly(),
-            new Plan10Round(),
-            new Plan20Round(),
-            new Plan50Round()
-        };
     }
 }

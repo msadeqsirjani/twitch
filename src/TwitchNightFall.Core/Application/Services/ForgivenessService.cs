@@ -7,6 +7,7 @@ using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
 using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Domain.Entities;
+using TwitchNightFall.Domain.Enums;
 using TwitchNightFall.Domain.Repository.Common;
 
 namespace TwitchNightFall.Core.Application.Services;
@@ -49,10 +50,19 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         var count = await Repository.CountAsync(x =>
             x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
 
-        var subscription = await _subscriptionService.FirstOrDefaultAsync(x => x.ExpiredAt >= DateTime.UtcNow, cancellationToken);
+        var subscription = await _subscriptionService.FirstOrDefaultAsync(
+            x => x.ExpiredAt >= DateTime.UtcNow && x.PlanType == PlanType.LuckRound, cancellationToken);
 
-        if (count >= _options.FollowerBoundary)
-            throw new MessageException("هر نام کاربری تنها 5 بار می تواند از این امکان در روز استفاده کند");
+        if (subscription != null)
+        {
+            if (count >= _options.FollowerBoundary + subscription.Count)
+                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary + subscription.Count } بار می تواند از این امکان در روز استفاده کند");
+        }
+        else
+        {
+            if (count >= _options.FollowerBoundary)
+                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary} بار می تواند از این امکان در روز استفاده کند");
+        }
 
         if (!await _twitchService.ExistsAsync(x => x.Id == twitchId, cancellationToken))
             throw new MessageException("کاربری با چنین شناسه ای یافت نشد");
