@@ -22,4 +22,5 @@ public class Twitch : Auditable
     public string Password { get; set; }
 
     public ICollection<Forgiveness> Forgiveness { get; set; }
+    public ICollection<Subscription> Subscription { get; set; }
 }
