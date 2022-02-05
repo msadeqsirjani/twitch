@@ -74,7 +74,7 @@
             <param name="file">فایل جهت آپلود شدن در فایل سرور</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.SubscriptionController.ShowPlans(Gridify.GridifyQuery)">
+        <member name="M:TwitchNightFall.Api.Controllers.SubscriptionController.GetSubscriptions(Gridify.GridifyQuery)">
             <summary>
             دریافت اطلاعات اشتراک خرید
             </summary>
