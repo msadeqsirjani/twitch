@@ -5,32 +5,31 @@ using Swashbuckle.AspNetCore.Annotations;
 using TwitchNightFall.Core.Application.Common;
 using TwitchNightFall.Core.Application.Services;
 
-namespace TwitchNightFall.Api.Controllers
+namespace TwitchNightFall.Api.Controllers;
+
+public class SubscriptionController : BaseController
 {
-    public class SubscriptionController : BaseController
+    private readonly IPlanService _planService;
+
+    public SubscriptionController(IPlanService planService)
     {
-        private readonly ISubscriptionService _subscriptionService;
+        _planService = planService;
+    }
 
-        public SubscriptionController(ISubscriptionService subscriptionService)
-        {
-            _subscriptionService = subscriptionService;
-        }
+    /// <summary>
+    /// دریافت اطلاعات اشتراک خرید
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [Authorize]
+    public IActionResult GetSubscriptions([FromQuery] GridifyQuery request)
+    {
+        var result = _planService.ShowPlans(request);
 
-        /// <summary>
-        /// دریافت اطلاعات اشتراک خرید
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetSubscriptions([FromQuery] GridifyQuery request)
-        {
-            var result = _subscriptionService.GetSubscriptions(request);
-
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }
