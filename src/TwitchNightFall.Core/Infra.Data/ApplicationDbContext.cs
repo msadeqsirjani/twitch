@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Forgiveness> Forgiveness { get; set; }
     public DbSet<Administrator> Administrator { get; set; }
     public DbSet<ResetPassword> ResetPassword { get; set; }
+    public DbSet<Subscription> Subscription { get; set; }
 
     public override int SaveChanges()
     {
@@ -32,6 +33,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ForgivenessConfiguration());
         modelBuilder.ApplyConfiguration(new AdministratorConfiguration());
         modelBuilder.ApplyConfiguration(new ResetPasswordConfiguration());
+        modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
