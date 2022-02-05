@@ -51,9 +51,9 @@ public class AdministratorController : BaseController
     [Authorize]
     public async Task<IActionResult> AddAdministrator([FromBody] AdministratorDto administrator)
     {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        administrator.CreatedBy = Guid.Parse(userId!);
+        administrator.CreatedBy = Guid.Parse(administratorId!);
 
         var result = await _administratorService.AddAdministrator(administrator);
 
@@ -71,9 +71,9 @@ public class AdministratorController : BaseController
     [Authorize]
     public async Task<IActionResult> ShowAdminProfile()
     {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        var result = await _administratorService.ShowProfileAsync(Guid.Parse(userId!), HttpContext);
+        var result = await _administratorService.ShowProfileAsync(Guid.Parse(administratorId!), HttpContext);
 
         return Ok(result);
     }
@@ -90,9 +90,9 @@ public class AdministratorController : BaseController
     [Authorize]
     public async Task<IActionResult> SaveAdminProfile([FromBody] AdministratorDto administrator)
     {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        administrator.Id = Guid.Parse(userId!);
+        administrator.Id = Guid.Parse(administratorId!);
 
         var result = await _administratorService.SaveProfileAsync(administrator);
 
@@ -162,9 +162,9 @@ public class AdministratorController : BaseController
     [Authorize]
     public async Task<IActionResult> Complete(Guid forgivenessId)
     {
-        var administrator = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        var result = await _forgivenessService.CompleteAsync(forgivenessId, Guid.Parse(administrator!));
+        var result = await _forgivenessService.CompleteAsync(forgivenessId, Guid.Parse(administratorId!));
 
         return Ok(result);
     }
