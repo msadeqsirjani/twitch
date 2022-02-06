@@ -14,6 +14,7 @@ public class TransactionConfiguration : AuditableConfiguration<Transaction>
 
         builder.Property(x => x.PlanId);
         builder.Property(x => x.TwitchId);
+        builder.Property(x => x.PaymentId);
         builder.Property(x => x.Price)
             .HasColumnType("money");
 

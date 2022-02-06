@@ -6,6 +6,7 @@ public class Transaction : Auditable
 {
     public Guid TwitchId { get; set; }
     public Guid PlanId { get; set; }
+    public string? PaymentId { get; set; }
     public double Price { get; set; }
 
     public Twitch? Twitch { get; set; }
