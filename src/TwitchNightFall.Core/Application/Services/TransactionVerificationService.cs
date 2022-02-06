@@ -1,14 +1,16 @@
-﻿namespace TwitchNightFall.Core.Application.Services;
+﻿using TwitchNightFall.Core.Application.Common;
+
+namespace TwitchNightFall.Core.Application.Services;
 
 public interface ITransactionVerificationService
 {
-    Task<bool> VerifyAsync(CancellationToken cancellationToken = new());
+    Task<Result> VerifyAsync(string paymentId, CancellationToken cancellationToken = new());
 }
 
 public class TransactionVerificationService : ITransactionVerificationService
 {
-    public Task<bool> VerifyAsync(CancellationToken cancellationToken = new())
+    public Task<Result> VerifyAsync(string paymentId, CancellationToken cancellationToken = new())
     {
-        return Task.FromResult(true);
+        return Task.FromResult(Result.WithSuccess(true));
     }
 }

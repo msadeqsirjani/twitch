@@ -81,6 +81,20 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TransactionController.Verify(System.String)">
+            <summary>
+            تاییدیه پرداخت
+            </summary>
+            <param name="paymentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TransactionController.Pay(TwitchNightFall.Domain.Entities.Transaction)">
+            <summary>
+            پرداخت و ثبت طرح اشتراکی
+            </summary>
+            <param name="transaction"></param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
             <summary>
             بررسی وجود نام کاربری معادل در توییچ و ایجاد اکانت جهت استفاده از گردونه شانس
