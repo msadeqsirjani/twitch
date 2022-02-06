@@ -6,7 +6,7 @@ public class Twitch : Auditable
 {
     public Twitch()
     {
-        
+
     }
 
     public Twitch(string username, string email, string password)
@@ -23,4 +23,5 @@ public class Twitch : Auditable
 
     public ICollection<Forgiveness> Forgiveness { get; set; }
     public ICollection<Subscription> Subscription { get; set; }
+    public ICollection<Transaction> Transaction { get; set; }
 }

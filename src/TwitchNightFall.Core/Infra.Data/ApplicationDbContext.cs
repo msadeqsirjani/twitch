@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ResetPassword> ResetPassword { get; set; }
     public DbSet<Subscription> Subscription { get; set; }
     public DbSet<Plan> Plan { get; set; }
+    public DbSet<Transaction> Transaction { get; set; }
 
     public override int SaveChanges()
     {
@@ -36,6 +37,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ResetPasswordConfiguration());
         modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
         modelBuilder.ApplyConfiguration(new PlanConfiguration());
+        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwitchNightFall.Domain.Common;
+﻿using TwitchNightFall.Domain.Common;
 using TwitchNightFall.Domain.Enums;
 
 namespace TwitchNightFall.Domain.Entities;
@@ -12,10 +7,11 @@ public class Plan : Auditable
 {
     public Plan()
     {
-        
+        Subscription = new List<Subscription>();
+        Transaction = new List<Transaction>();
     }
 
-    public Plan(Guid id, string? title, double price, int count, PlanType planType, PlanTime planTime, int delayBetweenEveryPurchase)
+    public Plan(Guid id, string? title, double price, int count, PlanType planType, PlanTime planTime, int delayBetweenEveryPurchase) : this()
     {
         Id = id;
         Title = title;
@@ -34,4 +30,5 @@ public class Plan : Auditable
     public int DelayBetweenEveryPurchase { get; set; }
 
     public ICollection<Subscription> Subscription { get; set; }
+    public ICollection<Transaction> Transaction { get; set; }
 }

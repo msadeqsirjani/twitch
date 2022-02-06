@@ -63,6 +63,9 @@ public static class DependencyContainer
         services.AddTransient<ISubscriptionService, SubscriptionService>();
         services.AddTransient<IPlanRepository, PlanRepository>();
         services.AddTransient<IPlanService, PlanService>();
+        services.AddTransient<ITransactionRepository, TransactionRepository>();
+        services.AddTransient<ITransactionService, TransactionService>();
+        services.AddTransient<ITransactionVerificationService, TransactionVerificationService>();
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IMailService, MailService>();
