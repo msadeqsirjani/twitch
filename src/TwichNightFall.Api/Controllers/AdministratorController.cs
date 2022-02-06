@@ -14,12 +14,14 @@ public class AdministratorController : BaseController
     private readonly IAdministratorService _administratorService;
     private readonly ITwitchService _twitchService;
     private readonly IForgivenessService _forgivenessService;
+    private readonly ITransactionService _transactionService;
 
-    public AdministratorController(IAdministratorService administratorService, ITwitchService twitchService, IForgivenessService forgivenessService)
+    public AdministratorController(IAdministratorService administratorService, ITwitchService twitchService, IForgivenessService forgivenessService, ITransactionService transactionService)
     {
         _administratorService = administratorService;
         _twitchService = twitchService;
         _forgivenessService = forgivenessService;
+        _transactionService = transactionService;
     }
 
     /// <summary>
@@ -165,6 +167,23 @@ public class AdministratorController : BaseController
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         var result = await _forgivenessService.CompleteAsync(forgivenessId, Guid.Parse(administratorId!));
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// مشاهده تمامی پرداخت های صورت گرفته
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [Authorize]
+    public IActionResult ShowTransaction([FromQuery] GridifyQuery request)
+    {
+        var result = _transactionService.ShowTransaction(request);
 
         return Ok(result);
     }

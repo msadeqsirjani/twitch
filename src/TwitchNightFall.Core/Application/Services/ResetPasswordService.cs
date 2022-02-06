@@ -31,7 +31,7 @@ public class ResetPasswordService : ServiceAsync<ResetPassword>, IResetPasswordS
 
     public async Task<Result> ShowTwitchAsync(string singleUseCode, CancellationToken cancellationToken = new())
     {
-        var resetPassword = await Repository.FirstOrDefaultAsync(x => x.SingleUseCode == singleUseCode && x.Expiry >= DateTime.UtcNow.AddMinutes(5), cancellationToken);
+        var resetPassword = await Repository.FirstOrDefaultAsync(x => x.SingleUseCode == singleUseCode && x.Expiry >= DateTime.UtcNow, cancellationToken);
 
         if (resetPassword == null)
             return Result.WithException("کدی با چنین مشخصاتی یافت نشد");

@@ -60,6 +60,13 @@
             <param name="forgivenessId"></param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTransaction(Gridify.GridifyQuery)">
+            <summary>
+            مشاهده تمامی پرداخت های صورت گرفته
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.FileController.Download(System.String)">
             <summary>
             دانلود تصاویر پروفایل ادمین
