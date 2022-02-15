@@ -8,7 +8,7 @@ using TwitchNightFall.Core.Application.ViewModels.Twitch;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class TwitchController : BaseController
+public class TwitchController : ApplicationController
 {
     private readonly ITwitchService _twitchService;
     private readonly IForgivenessService _forgivenessService;
@@ -69,7 +69,7 @@ public class TwitchController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> SignUp([FromBody] TwitchAddDto twitchAddDto)
+    public async Task<IActionResult> SignUp(TwitchAddDto twitchAddDto)
     {
         var result = await _twitchService.SignUpAsync(twitchAddDto);
 
@@ -134,7 +134,7 @@ public class TwitchController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> EditTwitch([FromBody] TwitchEditDto twitchEditDto)
+    public async Task<IActionResult> EditTwitch(TwitchEditDto twitchEditDto)
     {
         var result = await _twitchService.EditTwitchAsync(twitchEditDto);
 

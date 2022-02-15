@@ -8,7 +8,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class PlanController : BaseController
+public class PlanController : ApplicationController
 {
     private readonly IPlanService _planService;
 

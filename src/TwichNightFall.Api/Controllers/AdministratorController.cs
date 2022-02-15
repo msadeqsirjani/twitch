@@ -9,7 +9,7 @@ using TwitchNightFall.Core.Application.ViewModels.Administrator;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class AdministratorController : BaseController
+public class AdministratorController : ApplicationController
 {
     private readonly IAdministratorService _administratorService;
     private readonly ITwitchService _twitchService;
@@ -51,7 +51,7 @@ public class AdministratorController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddAdministrator([FromBody] AdministratorDto administrator)
+    public async Task<IActionResult> AddAdministrator(AdministratorDto administrator)
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -90,7 +90,7 @@ public class AdministratorController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> SaveAdminProfile([FromBody] AdministratorDto administrator)
+    public async Task<IActionResult> SaveAdminProfile(AdministratorDto administrator)
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 

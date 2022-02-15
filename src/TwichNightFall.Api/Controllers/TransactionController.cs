@@ -8,7 +8,7 @@ using TwitchNightFall.Core.Application.Common;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class TransactionController : BaseController
+public class TransactionController : ApplicationController
 {
     private readonly ITransactionVerificationService _transactionVerificationService;
     private readonly ITransactionService _transactionService;
@@ -46,7 +46,7 @@ public class TransactionController : BaseController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Pay([FromBody] Transaction transaction)
+    public async Task<IActionResult> Pay(Transaction transaction)
     {
         var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 

@@ -6,7 +6,7 @@ using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
 
-public class FileController : BaseController
+public class FileController : ApplicationController
 {
     private readonly IFileService _fileService;
 
