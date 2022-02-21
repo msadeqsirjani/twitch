@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using TwitchNightFall.Common.Common;
@@ -43,7 +44,7 @@ namespace TwitchNightFall.Core.Test.Infra.Data.Repository
 
             repository.Queryable().Should().BeEquivalentTo(administrators);
             repository.Queryable(false).Should().BeEquivalentTo(administrators);
-        } 
+        }
 
 
         [Fact]
@@ -64,8 +65,59 @@ namespace TwitchNightFall.Core.Test.Infra.Data.Repository
 
             using var repository = new AdministratorRepository(readContext);
 
-            repository.Queryable(x => x.Firstname == "Sadeq").Should().BeEquivalentTo(new List<Administrator>() { _administratorOne });
-            repository.Queryable(x => x.Lastname == "Razavi" && !string.IsNullOrEmpty(x.ProfileImageUrl), false).Should().BeEquivalentTo(new List<Administrator>() { _administratorTwo });
+            repository.Queryable(x => x.Firstname == "Sadeq").Should()
+                .NotBeNull().And
+                .BeEquivalentTo(new List<Administrator>() { _administratorOne });
+
+            repository.Queryable(x => x.Lastname == "Razavi" && !string.IsNullOrEmpty(x.ProfileImageUrl), false).Should()
+                .NotBeNull().And
+                .BeEquivalentTo(new List<Administrator>() { _administratorTwo });
+        }
+
+        [Fact]
+        public void FirstOrDefault_ReturnAtLeaseOneAdministrator()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase("600C3C35-C6B0-406A-8B61-997950EDC4B4")
+                .Options;
+
+            using var writeContext = new ApplicationDbContext(options);
+
+            writeContext.Add(_administratorOne);
+            writeContext.SaveChanges();
+
+            using var readContext = new ApplicationDbContext(options);
+
+            using var repository = new AdministratorRepository(readContext);
+
+            repository.FirstOrDefault(x => x.Firstname == "Sadeq").Should()
+                .NotBeNull().And
+                .BeEquivalentTo(_administratorOne);
+
+            repository.FirstOrDefault(x => x.Lastname == "").Should().BeNull();
+        }
+
+        [Fact]
+        public void Add_SaveAdministrator()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase("D1A4A1E3-0F44-45B4-99A5-B57D3948AAD0")
+                .Options;
+
+            using var writeContext = new ApplicationDbContext(options);
+            using var repository = new AdministratorRepository(writeContext);
+
+            repository.Add(_administratorOne);
+
+            writeContext.SaveChanges();
+
+            using var readContext = new ApplicationDbContext(options);
+
+            var administrator = readContext.Administrator.ToList().Single();
+
+            administrator.Should()
+                .NotBeNull().And
+                .BeEquivalentTo(_administratorOne);
         }
     }
 }
