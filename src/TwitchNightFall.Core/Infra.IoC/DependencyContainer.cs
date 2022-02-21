@@ -1,23 +1,22 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
+using System.Security.Claims;
 using System.Text;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Extensions;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.Services.Common;
-using TwitchNightFall.Core.Application.Validators;
 using TwitchNightFall.Core.Application.ViewModels;
-using TwitchNightFall.Core.Application.ViewModels.Administrator;
-using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Core.Infra.Data;
 using TwitchNightFall.Core.Infra.Data.Common;
 using TwitchNightFall.Core.Infra.Data.Repository;
@@ -32,14 +31,21 @@ public static class DependencyContainer
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers()
-            .AddFluentValidation()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var result = context.ModelState.Values.SelectMany(x => x.Errors).First().ErrorMessage;
+
+                    return new UnprocessableEntityObjectResult(Result.WithException(result));
+                };
+            })
+            .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
             .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
         services.AddOptions();
         services.AddMemoryCache();
-
-        services.AddTransient<IValidator<AdministratorDto>, AdministratorDtoValidator>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -57,8 +63,6 @@ public static class DependencyContainer
         services.AddTransient<IForgivenessService, ForgivenessService>();
         services.AddTransient<IAdministratorRepository, AdministratorRepository>();
         services.AddTransient<IAdministratorService, AdministratorService>();
-        services.AddTransient<IResetPasswordRepository, ResetPasswordRepository>();
-        services.AddTransient<IResetPasswordService, ResetPasswordService>();
         services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
         services.AddTransient<ISubscriptionService, SubscriptionService>();
         services.AddTransient<IPlanRepository, PlanRepository>();
@@ -68,14 +72,9 @@ public static class DependencyContainer
         services.AddTransient<ITransactionVerificationService, TransactionVerificationService>();
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IFileService, FileService>();
-        services.AddTransient<IMailService, MailService>();
-        services.AddTransient<IValidator<TwitchAddDto>, TwitchAddDtoValidator>();
-        services.AddTransient<IValidator<TwitchEditDto>, TwitchEditDtoValidator>();
 
         services.Configure<TwitchSetting>(configuration.GetSection("TwitchSetting"));
         services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
-        services.Configure<MailSetting>(configuration.GetSection("MailSetting"));
-        services.Configure<OtpSetting>(configuration.GetSection("OtpSetting"));
 
         services.AddHttpClient();
 
@@ -93,7 +92,7 @@ public static class DependencyContainer
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(setting.IssuerSigningKey)),
                     ValidateIssuer = setting.ValidateIssuer,
@@ -127,7 +126,11 @@ public static class DependencyContainer
                 };
             });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(JwtService.Administrator, builder => builder.RequireAssertion(context => context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value == JwtService.Administrator));
+            options.AddPolicy(JwtService.Other, builder => builder.RequireAssertion(context => context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value == JwtService.Other));
+        });
 
         services.AddSwaggerGen(options =>
         {

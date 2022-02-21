@@ -5,10 +5,6 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface ILogService
 {
     void LogError(Exception exception);
-    void LogError(string message);
-    void LogFatal(Exception exception);
-    void LogFatal(string message);
-    void LogInfo(string message);
 }
 
 public class LogService : ILogService
@@ -18,25 +14,5 @@ public class LogService : ILogService
     public void LogError(Exception exception)
     {
         _logger.Error(exception, exception.Message);
-    }
-
-    public void LogError(string message)
-    {
-        _logger.Error(message);
-    }
-
-    public void LogFatal(Exception exception)
-    {
-        _logger.Fatal(exception, exception.Message);
-    }
-
-    public void LogFatal(string message)
-    {
-        _logger.Fatal(message);
-    }
-
-    public void LogInfo(string message)
-    {
-        _logger.Information(message);
     }
 }

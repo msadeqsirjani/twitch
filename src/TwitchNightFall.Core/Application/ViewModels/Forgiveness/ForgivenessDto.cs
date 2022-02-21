@@ -1,4 +1,4 @@
-﻿namespace TwitchNightFall.Core.Application.ViewModels;
+﻿namespace TwitchNightFall.Core.Application.ViewModels.Forgiveness;
 
 public class ForgivenessDto
 {

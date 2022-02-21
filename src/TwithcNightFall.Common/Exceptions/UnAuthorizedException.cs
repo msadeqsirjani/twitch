@@ -1,12 +1,7 @@
-﻿namespace TwitchNightFall.Core.Application.Exceptions;
+﻿namespace TwitchNightFall.Common.Exceptions;
 
 public class UnAuthorizedException : Exception
 {
-    public UnAuthorizedException()
-    {
-
-    }
-
     public UnAuthorizedException(string message) : base(message)
     {
 

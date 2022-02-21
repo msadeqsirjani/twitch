@@ -1,4 +1,4 @@
-﻿using TwitchNightFall.Core.Application.Common;
+﻿using TwitchNightFall.Common.Common;
 
 namespace TwitchNightFall.Core.Application.Services;
 

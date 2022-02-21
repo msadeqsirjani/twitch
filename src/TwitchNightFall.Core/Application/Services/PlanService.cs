@@ -1,6 +1,6 @@
 ﻿using Gridify;
 using Microsoft.EntityFrameworkCore;
-using TwitchNightFall.Core.Application.Common;
+using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Repository.Common;

@@ -1,4 +1,4 @@
-﻿namespace TwitchNightFall.Core.Application.Exceptions;
+﻿namespace TwitchNightFall.Common.Exceptions;
 
 public class MessageException : Exception
 {

@@ -1,7 +1,7 @@
 ﻿using Gridify;
 using Microsoft.EntityFrameworkCore;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels.Transaction;
@@ -37,16 +37,16 @@ public class TransactionService : ServiceAsync<Transaction>, ITransactionService
         var existSubscription = await _subscriptionService.GetSubscriptionAsync(x => x.ExpiredAt >= DateTime.UtcNow, cancellationToken);
 
         if (existSubscription != null)
-            throw new MessageException("پایان اعتبار مدت اشتراکی شما به اتمام نرسیده است");
+            throw new MessageException("Your subscription period has not expired");
 
         var plan = await _planService.FirstOrDefaultAsync(transaction.PlanId, cancellationToken);
 
         if (plan == null)
-            throw new MessageException("پلنی با این شناسه یافت نشد");
+            throw new MessageException("No plan found with this ID");
 
         if (!string.IsNullOrEmpty(transaction.PaymentId) &&
             (await _transactionVerificationService.VerifyAsync(transaction.PaymentId, cancellationToken)).Value != true)
-            throw new MessageException("شناسه پرداخت معنبر نمی باشد");
+            throw new MessageException("Payment ID is not valid");
 
         var subscription = new Subscription
         {
@@ -72,7 +72,7 @@ public class TransactionService : ServiceAsync<Transaction>, ITransactionService
         var transactions = Repository.Queryable(false)
             .Include(x => x.Plan)
             .Include(x => x.Twitch)
-            .Select(x => new TransactionDto()
+            .Select(x => new TransactionDto
             {
                 Id = x.Id,
                 PlanId = x.PlanId,

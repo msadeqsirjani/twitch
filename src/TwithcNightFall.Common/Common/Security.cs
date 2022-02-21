@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace TwitchNightFall.Core.Application.Common;
+namespace TwitchNightFall.Common.Common;
 
 public static class Security
 {

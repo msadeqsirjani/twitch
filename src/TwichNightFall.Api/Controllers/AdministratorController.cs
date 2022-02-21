@@ -3,7 +3,7 @@ using Gridify;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TwitchNightFall.Core.Application.Common;
+using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services;
 using TwitchNightFall.Core.Application.ViewModels.Administrator;
 
@@ -25,10 +25,10 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// ورود ادمین به سیستم
+    /// Admin login
     /// </summary>
-    /// <param name="username">نام کاربری ادمین</param>
-    /// <param name="password">کلمه عبور ادمین</param>
+    /// <param name="username">Admin username</param>
+    /// <param name="password">Admin Password</param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
@@ -42,15 +42,17 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// افزودن ادمیت جدید به سیستم
+    /// Add new admin to the system
     /// </summary>
     /// <param name="administrator"></param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> AddAdministrator(AdministratorDto administrator)
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -63,14 +65,15 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// مشاهده پروفایل ادمین
+    /// View admin profile
     /// </summary>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> ShowAdminProfile()
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -81,15 +84,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// ویرایش پروفایل ادمین
+    /// Edit admin profile
     /// </summary>
-    /// <param name="administrator">مدل ورودی جهت ویرایش پروفایل ادمین</param>
+    /// <param name="administrator">Input model for editing admin profile</param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> SaveAdminProfile(AdministratorDto administrator)
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -102,15 +106,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// مشاهده اطلاعات صفحه توییچ
+    /// View Twitch page info
     /// </summary>
-    /// <param name="username">نام کاربری توییچ شرکت کننده در قرعه کشی</param>
+    /// <param name="username">Username Twitch participant in the lottery</param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> ShowTwitchProfile(string username)
     {
         var result = await _twitchService.ShowTwitchProfile(username);
@@ -119,15 +124,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// مشاهده اطلاعات افرادی که در طول روز در قرعه کشی شرکت کرده اند و نمایش تعداد دنبال کنندگانی که برنده به دست آورده اند  
+    /// View the information of the people who participated in the lottery during the day and show the number of followers who won  
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Paging<>))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public IActionResult ShowDetail([FromQuery] GridifyQuery request)
     {
         var result = _forgivenessService.ShowDetail(request);
@@ -136,15 +142,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// تاریخچه سوابق نتایج قرعه کشی شرکت کننده
+    /// History of participant lottery results records
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Paging<>))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public IActionResult ShowHistory([FromQuery] GridifyQuery request)
     {
         var result = _forgivenessService.ShowHistory(request);
@@ -153,15 +160,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود
+    /// By calling this service and giving the lottery ID, the number of followers obtained will increase.
     /// </summary>
     /// <param name="forgivenessId"></param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> Complete(Guid forgivenessId)
     {
         var administratorId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -172,15 +180,16 @@ public class AdministratorController : ApplicationController
     }
 
     /// <summary>
-    /// مشاهده تمامی پرداخت های صورت گرفته
+    /// View all payments made
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public IActionResult ShowTransaction([FromQuery] GridifyQuery request)
     {
         var result = _transactionService.ShowTransaction(request);

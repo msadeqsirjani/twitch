@@ -6,151 +6,121 @@
     <members>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SignIn(System.String,System.String)">
             <summary>
-            ورود ادمین به سیستم
+            Admin login
             </summary>
-            <param name="username">نام کاربری ادمین</param>
-            <param name="password">کلمه عبور ادمین</param>
+            <param name="username">Admin username</param>
+            <param name="password">Admin Password</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.AddAdministrator(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
             <summary>
-            افزودن ادمیت جدید به سیستم
+            Add new admin to the system
             </summary>
             <param name="administrator"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowAdminProfile">
             <summary>
-            مشاهده پروفایل ادمین
+            View admin profile
             </summary>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.SaveAdminProfile(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
             <summary>
-            ویرایش پروفایل ادمین
+            Edit admin profile
             </summary>
-            <param name="administrator">مدل ورودی جهت ویرایش پروفایل ادمین</param>
+            <param name="administrator">Input model for editing admin profile</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchProfile(System.String)">
             <summary>
-            مشاهده اطلاعات صفحه توییچ
+            View Twitch page info
             </summary>
-            <param name="username">نام کاربری توییچ شرکت کننده در قرعه کشی</param>
+            <param name="username">Username Twitch participant in the lottery</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowDetail(Gridify.GridifyQuery)">
             <summary>
-            مشاهده اطلاعات افرادی که در طول روز در قرعه کشی شرکت کرده اند و نمایش تعداد دنبال کنندگانی که برنده به دست آورده اند  
+            View the information of the people who participated in the lottery during the day and show the number of followers who won  
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowHistory(Gridify.GridifyQuery)">
             <summary>
-            تاریخچه سوابق نتایج قرعه کشی شرکت کننده
+            History of participant lottery results records
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.Complete(System.Guid)">
             <summary>
-            با صدا زدن این سرویس و دادن شناسه قرعه کشی تعداد دنبال کنندگان به دست آمده به دنبال شوندگان شرکت کننده افزوده می شود
+            By calling this service and giving the lottery ID, the number of followers obtained will increase.
             </summary>
             <param name="forgivenessId"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTransaction(Gridify.GridifyQuery)">
             <summary>
-            مشاهده تمامی پرداخت های صورت گرفته
+            View all payments made
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.FileController.Download(System.String)">
             <summary>
-            دانلود تصاویر پروفایل ادمین
+            Download admin profile pictures
             </summary>
-            <param name="filename">عنوان فایلی که در خروجی فایل آپلود به کاربر داده می شود</param>
+            <param name="filename">The title of the file given to the user at the output of the upload file</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.FileController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            آپلود تصاویر پروفایل ادمین
+            Upload admin profile pictures
             </summary>
-            <param name="file">فایل جهت آپلود شدن در فایل سرور</param>
+            <param name="file">File to upload to file server</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowPlans(Gridify.GridifyQuery)">
             <summary>
-            دریافت اطلاعات اشتراک خرید
+            Receive purchase subscription information
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.TransactionController.Verify(System.String)">
             <summary>
-            تاییدیه پرداخت
+            payment confirmation
             </summary>
             <param name="paymentId"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.TransactionController.Pay(TwitchNightFall.Domain.Entities.Transaction)">
             <summary>
-            پرداخت و ثبت طرح اشتراکی
+            Payment and registration of joint plan
             </summary>
             <param name="transaction"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
             <summary>
-            بررسی وجود نام کاربری معادل در توییچ و ایجاد اکانت جهت استفاده از گردونه شانس
+            Check the existence of an equivalent username in Twitch and create an account to use the chance wheel
             </summary>
-            <param name="username">نام کابری کابر شرکت کننده در قرعه کشی گردونه شانس</param>
+            <param name="username">Username of the lucky participant in the lottery</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.AccessToken(System.String)">
+            <summary>
+            Request to create an account and receive a token
+            </summary>
+            <param name="username"></param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Forgiveness(System.Int32)">
             <summary>
-            ذخیره و بررسی گردونه شانس دنبال شوندگان
+            Save and check the chance wheel of the followers
             </summary>
-            <param name="twitchAccountId">شناسه اکانت های ایجاد شده در مرحله ثببت نام در گردونه شانس</param>
-            <param name="prize">تعداد دنبال کنندگانی که در این قرعه کشی برنده شده است این عدد تنها بین 1 تا 5 می باشد</param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.SignUp(TwitchNightFall.Core.Application.ViewModels.Twitch.TwitchAddDto)">
-            <summary>
-            ثبت نام کاربر
-            </summary>
-            <param name="twitchAddDto"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.SignIn(System.String,System.String)">
-            <summary>
-            ورود کاربر
-            </summary>
-            <param name="username"></param>
-            <param name="password"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ResetPassword(System.String)">
-            <summary>
-            بازیابی رمز عبور
-            </summary>
-            <param name="email"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ResetPasswordConfirmation(System.String)">
-            <summary>
-            تایید بازیابی رمز عبور
-            </summary>
-            <param name="singleUseCode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.EditTwitch(TwitchNightFall.Core.Application.ViewModels.Twitch.TwitchEditDto)">
-            <summary>
-            ویرایش پست الکترونیک و رمز عبور
-            </summary>
-            <param name="twitchEditDto"></param>
+            <param name="prize">The number of followers that has won this lottery is only between 1 and 5</param>
             <returns></returns>
         </member>
     </members>

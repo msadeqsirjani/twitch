@@ -1,4 +1,4 @@
-﻿namespace TwitchNightFall.Core.Application.Common;
+﻿namespace TwitchNightFall.Common.Common;
 
 public static class ContentHelper
 {

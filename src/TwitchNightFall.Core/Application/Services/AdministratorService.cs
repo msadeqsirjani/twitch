@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels.Administrator;
 using TwitchNightFall.Domain.Entities;
@@ -34,10 +34,10 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
     {
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Username == username && x.IsActive, cancellationToken);
 
-        if (administrator == null) throw new MessageException("نام کاربری یافت نشد");
+        if (administrator == null) throw new MessageException("Username or password is incorrect");
 
         if (!Security.Decrypt(administrator.Password!).Equals(password))
-            throw new MessageException("رمز عبور نادرست می باشد");
+            throw new MessageException("Username or password is incorrect");
 
         var jwtTokenDto = await _jwtService.GenerateJwtToken(administrator.Id, administrator.Username!, true);
 
@@ -73,7 +73,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (administrator == null)
-            throw new MessageException("حسابی با چنین مشخصاتی یافت نشد");
+            throw new MessageException("No account was found with such specifications");
 
         var profileImageUrl = string.IsNullOrEmpty(administrator.ProfileImageUrl)
             ? null
@@ -101,7 +101,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         var administrator = await Repository.FirstOrDefaultAsync(x => x.Id == administratorDto.Id && x.IsActive, cancellationToken);
 
         if (administrator == null)
-            throw new MessageException("حسابی با چنین مشخصاتی یافت نشد");
+            throw new MessageException("No account was found with such specifications");
 
         administrator.Username = administratorDto.Username;
         administrator.Password = Security.Encrypt(administratorDto.Password!);

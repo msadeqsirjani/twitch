@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TwitchNightFall.Core.Application.Common;
+using TwitchNightFall.Common.Common;
 using TwitchNightFall.Domain.Entities;
 
 namespace TwitchNightFall.Core.Infra.Data.Configuration;

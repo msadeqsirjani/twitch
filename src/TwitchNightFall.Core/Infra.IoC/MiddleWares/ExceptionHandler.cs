@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Core.Infra.IoC.MiddleWares;

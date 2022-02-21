@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
 using TwitchNightFall.Core.Application.ViewModels.Twitch;
@@ -13,89 +11,28 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface ITwitchService : IServiceAsync<Twitch>
 {
-    Task<Result> SignUpAsync(TwitchAddDto twitchAddDto, CancellationToken cancellationToken = new());
-    Task<Result> SingInAsync(string username, string password, CancellationToken cancellationToken = new());
-    Task<Result> EditTwitchAsync(TwitchEditDto twitchAddDto, CancellationToken cancellationToken = new());
     Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
     Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new());
+    Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new());
 }
 
 public class TwitchService : ServiceAsync<Twitch>, ITwitchService
 {
-    private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-    private readonly IValidator<TwitchAddDto> _validator;
     private readonly IJwtService _jwtService;
+    private readonly IUnitOfWorkAsync _unitOfWork;
     private readonly HttpClient _client;
     private readonly TwitchSetting _options;
 
     public TwitchService(IRepositoryAsync<Twitch> repository,
-        IUnitOfWorkAsync unitOfWorkAsync,
         IHttpClientFactory httpClientFactory,
-        IOptions<TwitchSetting> options, IValidator<TwitchAddDto> validator, IJwtService jwtService) : base(repository)
+        IOptions<TwitchSetting> options,
+        IJwtService jwtService, 
+        IUnitOfWorkAsync unitOfWork) : base(repository)
     {
-        _unitOfWorkAsync = unitOfWorkAsync;
-        _validator = validator;
         _jwtService = jwtService;
+        _unitOfWork = unitOfWork;
         _client = httpClientFactory.CreateClient();
         _options = options.Value;
-    }
-
-    public async Task<Result> SignUpAsync(TwitchAddDto twitchAddDto, CancellationToken cancellationToken = new())
-    {
-        var validation = await _validator.ValidateAsync(twitchAddDto, cancellationToken);
-
-        if (!validation.IsValid)
-            throw new MessageException(validation.Errors.FirstOrDefault()?.ErrorMessage);
-
-        var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == twitchAddDto.Username, cancellationToken);
-
-        if (twitch != null)
-            throw new MessageException("نام کاربری تکراری می باشد");
-
-        if (!await IsAvailableTwitch(twitchAddDto.Username!, cancellationToken))
-            throw new MessageException("نام کاربری معادلی در توییچ یافت نشد");
-
-        twitch = new Twitch(twitchAddDto.Username!, twitchAddDto.Email!, Security.Encrypt(twitchAddDto.Password!));
-
-        await Repository.AddAsync(twitch, cancellationToken);
-
-        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
-
-        var jwtToken = await _jwtService.GenerateJwtToken(twitch.Id, twitch.Username, false);
-
-        return Result.WithSuccess(jwtToken);
-    }
-
-    public async Task<Result> SingInAsync(string username, string password, CancellationToken cancellationToken = new())
-    {
-        var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
-
-        if (twitch == null)
-            return Result.WithSuccess("نام کاربری یافت نشد");
-
-        if (!Security.Decrypt(twitch.Password!).Equals(password))
-            throw new MessageException("رمز عبور نادرست می باشد");
-
-        var jwtTokenDto = await _jwtService.GenerateJwtToken(twitch.Id, twitch.Username!, false);
-
-        return Result.WithSuccess(jwtTokenDto);
-    }
-
-    public async Task<Result> EditTwitchAsync(TwitchEditDto twitchAddDto, CancellationToken cancellationToken = new())
-    {
-        var twitch = await Repository.FirstOrDefaultAsync(x => x.Id == twitchAddDto.Id, cancellationToken);
-
-        if(twitch == null)
-            return Result.WithException("حسابی با این مشخصات یافت نشد");
-
-        twitch.Email = string.IsNullOrEmpty(twitchAddDto.Email) ? twitch.Email : twitchAddDto.Email;
-        twitch.Password = string.IsNullOrEmpty(twitchAddDto.Password) ? twitch.Password : Security.Encrypt(twitchAddDto.Password);
-
-        Repository.Attach(twitch);
-
-        await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
-        
-        return Result.WithSuccess(Statement.Success);
     }
 
     public async Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new())
@@ -123,5 +60,22 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
     public async Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new())
     {
         return await ShowTwitchProfile(username, cancellationToken) != null;
+    }
+
+    public async Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new())
+    {
+        var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
+
+        if (twitch == null)
+        {
+            twitch = new Twitch(username);
+
+            Repository.Add(twitch);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        var token = await _jwtService.GenerateJwtToken(twitch.Id, username, false);
+
+        return Result.WithSuccess(token);
     }
 }

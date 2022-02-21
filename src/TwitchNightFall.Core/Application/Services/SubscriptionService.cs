@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
-using TwitchNightFall.Core.Infra.Data.Repository;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Enums;
 using TwitchNightFall.Domain.Repository;
@@ -36,7 +35,7 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
         return await Repository.Queryable()
             .Include(x => x.Plan)
             .Where(predicate)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<Result> SubscribeAsync(Subscription subscription, CancellationToken cancellationToken = new())
@@ -45,11 +44,11 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
             .FirstOrDefaultAsync(x => x.Id == subscription.PlanId, cancellationToken);
 
         if (plan == null)
-            throw new MessageException("پلنی با این شناسه موجود نمی باشد");
+            throw new MessageException("There is no plan with this ID");
 
         if (plan.PlanType == PlanType.PurchaseFollower)
         {
-            var forgiveness = new Forgiveness(subscription.TwitchId, plan.Count);
+            var forgiveness = new Forgiveness(subscription.TwitchId, plan.Count, ForgivenessType.Subscription);
 
             await _forgivenessRepository.AddAsync(forgiveness, cancellationToken);
         }

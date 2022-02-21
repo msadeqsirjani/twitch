@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 
 namespace TwitchNightFall.Core.Application.Extensions;
 

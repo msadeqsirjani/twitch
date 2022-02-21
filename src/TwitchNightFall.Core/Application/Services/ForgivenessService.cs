@@ -1,10 +1,11 @@
 ﻿using Gridify;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using TwitchNightFall.Core.Application.Common;
-using TwitchNightFall.Core.Application.Exceptions;
+using TwitchNightFall.Common.Common;
+using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Core.Application.ViewModels;
+using TwitchNightFall.Core.Application.ViewModels.Forgiveness;
 using TwitchNightFall.Core.Application.ViewModels.Twitch;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Enums;
@@ -43,41 +44,42 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
     {
         var isFirstForgiveness = false;
         if (prize is > 5 or < 0)
-            throw new MessageException("تعداد فالوور های هدیه داده شده نمی تواند کمتر از 0 و بیشتر از 5 باشد");
+            throw new MessageException("The number of gifted followers can not be less than 0 and more than 5");
 
         var now = DateTime.UtcNow;
 
         var count = await Repository.CountAsync(x =>
-            x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0, cancellationToken);
+            x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
+            x.ForgivenessType == ForgivenessType.Free, cancellationToken);
 
         var subscription = await _subscriptionService.GetSubscriptionAsync(
             x => x.ExpiredAt >= DateTime.UtcNow && x.Plan!.PlanType == PlanType.LuckRound, cancellationToken);
 
         if (subscription != null)
         {
-            if (count >= _options.FollowerBoundary + subscription.Plan!.Count)
-                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary + subscription.Plan!.Count } بار می تواند از این امکان در روز استفاده کند");
+            if (count >= _options.FollowerBoundary + subscription.Plan?.Count)
+                throw new MessageException($"Each username can only use this feature {_options.FollowerBoundary + subscription.Plan!.Count} times a day");
         }
         else
         {
             if (count >= _options.FollowerBoundary)
-                throw new MessageException($"هر نام کاربری تنها {_options.FollowerBoundary} بار می تواند از این امکان در روز استفاده کند");
+                throw new MessageException($"Each username can only use this feature {_options.FollowerBoundary} times a day");
         }
 
         if (!await _twitchService.ExistsAsync(x => x.Id == twitchId, cancellationToken))
-            throw new MessageException("کاربری با چنین شناسه ای یافت نشد");
+            throw new MessageException("No user with such an ID was found");
 
         Forgiveness forgiveness;
         if (!await Repository.ExistsAsync(x => x.TwitchId == twitchId, cancellationToken))
         {
-            forgiveness = new Forgiveness(twitchId, _options.FollowerGift);
+            forgiveness = new Forgiveness(twitchId, _options.FollowerGift, ForgivenessType.Gift);
 
             await Repository.AddAsync(forgiveness, cancellationToken);
 
             isFirstForgiveness = true;
         }
 
-        forgiveness = new Forgiveness(twitchId, prize);
+        forgiveness = new Forgiveness(twitchId, prize, ForgivenessType.Free);
 
         await Repository.AddAsync(forgiveness, cancellationToken);
 
@@ -91,7 +93,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         var forgiveness = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (forgiveness == null)
-            throw new MessageException("شناسه قرعه کشی موجود نمی باشد");
+            throw new MessageException("Lottery ID is not available");
 
         forgiveness.IsChecked = true;
         forgiveness.ModifiedBy = administrator;
@@ -136,7 +138,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
     public Paging<ForgivenessDto> ShowHistory(GridifyQuery request)
     {
         var twitches = Repository.Queryable(false)
-            .Select(x => new ForgivenessDto()
+            .Select(x => new ForgivenessDto
             {
                 Id = x.Id,
                 Prize = x.Prize,

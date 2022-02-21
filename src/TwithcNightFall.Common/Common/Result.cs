@@ -1,4 +1,4 @@
-﻿namespace TwitchNightFall.Core.Application.Common;
+﻿namespace TwitchNightFall.Common.Common;
 
 public enum ResultMode : byte
 {
@@ -32,7 +32,7 @@ public class Result
 
 public class Statement
 {
-    public const string Success = "عملیات با موفقیت انجام شد";
-    public const string UnAuthorized = "احراز هویت کاربر با خطا همراه شد";
-    public const string Failure = "در اجرا عملیات خطایی رخ داده است";
+    public const string Success = "Mission accomplished";
+    public const string UnAuthorized = "User authentication was associated with an error";
+    public const string Failure = "An error occurred while executing the operation";
 }

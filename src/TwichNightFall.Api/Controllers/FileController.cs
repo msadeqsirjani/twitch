@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TwitchNightFall.Core.Application.Common;
+using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services;
 
 namespace TwitchNightFall.Api.Controllers;
@@ -16,15 +16,16 @@ public class FileController : ApplicationController
     }
 
     /// <summary>
-    /// دانلود تصاویر پروفایل ادمین
+    /// Download admin profile pictures
     /// </summary>
-    /// <param name="filename">عنوان فایلی که در خروجی فایل آپلود به کاربر داده می شود</param>
+    /// <param name="filename">The title of the file given to the user at the output of the upload file</param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(byte[]))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> Download(string filename)
     {
         var content = await _fileService.DownloadAsync(filename);
@@ -33,15 +34,16 @@ public class FileController : ApplicationController
     }
 
     /// <summary>
-    /// آپلود تصاویر پروفایل ادمین
+    /// Upload admin profile pictures
     /// </summary>
-    /// <param name="file">فایل جهت آپلود شدن در فایل سرور</param>
+    /// <param name="file">File to upload to file server</param>
     /// <returns></returns>
     [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> Upload(IFormFile file)
     {
         var filename = await _fileService.Upload(file);

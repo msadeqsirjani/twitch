@@ -9,16 +9,16 @@ public class AdministratorDtoValidator : AbstractValidator<AdministratorDto>
     {
         RuleFor(x => x.Username)
             .NotEmpty()
-            .WithMessage("نام کاربری نمی تواند خالی باشد")
+            .WithMessage("Username cannot be empty")
             .MaximumLength(250)
-            .WithMessage("نام کاربری نمی تواند بیشتر از 250 کاراکتر باشد");
+            .WithMessage("Username can not be more than 250 characters");
 
         RuleFor(x => x.Firstname)
             .MaximumLength(250)
-            .WithMessage("نام نمی تواند بیشتر از 250 کاراکتر باشد");
+            .WithMessage("The First name can not be more than 250 characters");
 
         RuleFor(x => x.Lastname)
             .MaximumLength(250)
-            .WithMessage("نام خانوادگی نمی تواند بیشتر از 250 کاراکتر باشد");
+            .WithMessage("Last name can not be more than 250 characters");
     }
 }

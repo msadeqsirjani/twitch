@@ -18,6 +18,12 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
         builder.Property(x => x.Prize)
             .IsRequired();
 
+        builder.Property(x => x.IsChecked)
+            .IsRequired();
+
+        builder.Property(x => x.ForgivenessType)
+            .HasConversion<string>();
+
         builder.Property(x => x.ModifiedBy);
 
         builder.HasOne(x => x.Twitch)

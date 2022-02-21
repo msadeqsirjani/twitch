@@ -4,7 +4,7 @@ using TwitchNightFall.Domain.Entities;
 
 namespace TwitchNightFall.Core.Infra.Data.Configuration;
 
-public class TwtichConfiguration : AuditableConfiguration<Twitch>
+public class TwitchConfiguration : AuditableConfiguration<Twitch>
 {
     public override void Configure(EntityTypeBuilder<Twitch> builder)
     {
@@ -15,13 +15,6 @@ public class TwtichConfiguration : AuditableConfiguration<Twitch>
         builder.Property(x => x.Username)
             .IsRequired()
             .HasMaxLength(250);
-
-        builder.Property(x => x.Email)
-            .IsRequired()
-            .HasMaxLength(255);
-
-        builder.Property(x => x.Password)
-            .IsRequired();
 
         builder.HasMany(x => x.Forgiveness)
             .WithOne(x => x.Twitch)

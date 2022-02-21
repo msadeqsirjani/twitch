@@ -15,7 +15,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Twitch> Twitch { get; set; }
     public DbSet<Forgiveness> Forgiveness { get; set; }
     public DbSet<Administrator> Administrator { get; set; }
-    public DbSet<ResetPassword> ResetPassword { get; set; }
     public DbSet<Subscription> Subscription { get; set; }
     public DbSet<Plan> Plan { get; set; }
     public DbSet<Transaction> Transaction { get; set; }
@@ -31,10 +30,9 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfiguration(new TwtichConfiguration());
+        modelBuilder.ApplyConfiguration(new TwitchConfiguration());
         modelBuilder.ApplyConfiguration(new ForgivenessConfiguration());
         modelBuilder.ApplyConfiguration(new AdministratorConfiguration());
-        modelBuilder.ApplyConfiguration(new ResetPasswordConfiguration());
         modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
         modelBuilder.ApplyConfiguration(new PlanConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
