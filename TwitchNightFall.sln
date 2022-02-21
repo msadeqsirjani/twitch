@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Api", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Core", "src\TwitchNightFall.Core\TwitchNightFall.Core.csproj", "{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Common", "src\TwithcNightFall.Common\TwitchNightFall.Common.csproj", "{37FC05B7-6CBF-4A34-ADEE-A74D03BFD945}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Common", "src\TwithcNightFall.Common\TwitchNightFall.Common.csproj", "{37FC05B7-6CBF-4A34-ADEE-A74D03BFD945}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A0C96741-4EF1-48CD-8B30-01963EB77649}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CF25DCB8-C9BB-46FC-A570-B93DD732C59E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Common.Test", "test\TwitchNightFall.Common.Test\TwitchNightFall.Common.Test.csproj", "{E73E133C-E09C-4A42-B3CA-B395F358B17B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchNightFall.Common.Test", "test\TwitchNightFall.Common.Test\TwitchNightFall.Common.Test.csproj", "{E73E133C-E09C-4A42-B3CA-B395F358B17B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchNightFall.Core.Test", "test\TwitchNightFall.Core.Test\TwitchNightFall.Core.Test.csproj", "{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{E73E133C-E09C-4A42-B3CA-B395F358B17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E73E133C-E09C-4A42-B3CA-B395F358B17B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E73E133C-E09C-4A42-B3CA-B395F358B17B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{AB29CE89-B6FD-4E22-8D1C-CDCE9295B069} = {A0C96741-4EF1-48CD-8B30-01963EB77649}
 		{37FC05B7-6CBF-4A34-ADEE-A74D03BFD945} = {A0C96741-4EF1-48CD-8B30-01963EB77649}
 		{E73E133C-E09C-4A42-B3CA-B395F358B17B} = {CF25DCB8-C9BB-46FC-A570-B93DD732C59E}
+		{5C3E6EA5-2D37-4302-A7D8-FC8FCD46701B} = {CF25DCB8-C9BB-46FC-A570-B93DD732C59E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {217C2925-EA07-4124-89D6-ECBCBDE9C8DC}
