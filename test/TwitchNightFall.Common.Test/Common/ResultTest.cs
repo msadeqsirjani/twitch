@@ -15,7 +15,7 @@ namespace TwitchNightFall.Common.Test.Common
 
             result.ResultMode.Should().Be(ResultMode.Success);
             result.Message.Should().BeNullOrEmpty();
-            result.Value.Should().BeNull();
+            ((object)result.Value).Should().BeNull();
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace TwitchNightFall.Common.Test.Common
 
             result.ResultMode.Should().Be(ResultMode.Success);
             result.Message.Should().BeNullOrEmpty();
-            result.Value.Should().NotBeNull();
+            ((object)result.Value).Should().NotBeNull();
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace TwitchNightFall.Common.Test.Common
             result.ResultMode.Should().Be(ResultMode.Success);
             result.Message.Should().NotBeNullOrEmpty();
             result.Message.Should().BeEquivalentTo(message);
-            result.Value.Should().NotBeNull();
+            ((object)result.Value).Should().NotBeNull();
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace TwitchNightFall.Common.Test.Common
             result.ResultMode.Should().Be(ResultMode.Success);
             result.Message.Should().NotBeNullOrEmpty();
             result.Message.Should().BeEquivalentTo(message);
-            result.Value.Should().BeNull();
+            ((object)result.Value).Should().BeNull();
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace TwitchNightFall.Common.Test.Common
             result.ResultMode.Should().Be(ResultMode.Message);
             result.Message.Should().NotBeNullOrEmpty();
             result.Message.Should().BeEquivalentTo(message);
-            result.Value.Should().BeNull();
+            ((object)result.Value).Should().BeNull();
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace TwitchNightFall.Common.Test.Common
 
             result.ResultMode.Should().Be(ResultMode.Exception);
             result.Message.Should().BeNullOrEmpty();
-            result.Value.Should().BeNull();
+            ((object)result.Value).Should().BeNull();
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace TwitchNightFall.Common.Test.Common
 
             result.ResultMode.Should().Be(ResultMode.Exception);
             result.Message.Should().NotBeNullOrEmpty();
-            result.Value.Should().BeNull();
+            ((object)result.Value).Should().BeNull();
         }
 
         [Fact]
@@ -95,8 +95,8 @@ namespace TwitchNightFall.Common.Test.Common
             result.ResultMode.Should().Be(ResultMode.Exception);
             result.Message.Should().NotBeNullOrEmpty();
             result.Message.Should().BeEquivalentTo(message);
-            result.Value.Should().NotBeNull();
-            result.Value.Should().BeOfType<Exception>();
+            ((object)result.Value).Should().NotBeNull();
+            ((object)result.Value).Should().BeOfType<Exception>();
         }
     }
 }
