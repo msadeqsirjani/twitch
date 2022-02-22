@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TwitchNightFall.Core\TwitchNightFall.Core.csproj" />
+    <ProjectReference Include="..\..\src\TwithcNightFall.Common\TwitchNightFall.Common.csproj" />
   </ItemGroup>
 
 </Project>

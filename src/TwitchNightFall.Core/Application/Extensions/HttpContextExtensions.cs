@@ -12,11 +12,10 @@ public static class HttpContextExtensions
 
         var token = string.Empty;
 
-        if (authorizationHeader != null && string.IsNullOrEmpty(authorizationHeader) &&
-            authorizationHeader.StartsWith("Bearer ")) return token;
+        if (authorizationHeader != null && string.IsNullOrEmpty(authorizationHeader)) return token;
 
         token = authorizationHeader?["Bearer ".Length..];
 
-        return token ?? throw new UnAuthorizedException(Statement.UnAuthorized);
+        return !string.IsNullOrEmpty(token) ? token : throw new UnAuthorizedException(Statement.UnAuthorized);
     }
 }

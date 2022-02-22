@@ -21,4 +21,4 @@ public class AdministratorDtoValidator : AbstractValidator<AdministratorDto>
             .MaximumLength(250)
             .WithMessage("Last name can not be more than 250 characters");
     }
-}
+}   
