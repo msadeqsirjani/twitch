@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services.Common;
@@ -14,6 +16,8 @@ public interface ITwitchService : IServiceAsync<Twitch>
     Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
     Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new());
     Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new());
+
+    Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new());
 }
 
 public class TwitchService : ServiceAsync<Twitch>, ITwitchService
@@ -26,7 +30,7 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
     public TwitchService(IRepositoryAsync<Twitch> repository,
         IHttpClientFactory httpClientFactory,
         IOptions<TwitchSetting> options,
-        IJwtService jwtService, 
+        IJwtService jwtService,
         IUnitOfWorkAsync unitOfWork) : base(repository)
     {
         _jwtService = jwtService;
@@ -77,5 +81,17 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         var token = await _jwtService.GenerateJwtToken(twitch.Id, username, false);
 
         return Result.WithSuccess(token);
+    }
+
+    public async Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new CancellationToken())
+    {
+        var count = await Repository.Queryable(false)
+            .Include(x => x.Forgiveness)
+            .SelectMany(x => x.Forgiveness)
+            .Where(x => !x.IsChecked)
+            .Select(x=>x.Prize)
+            .SumAsync(cancellationToken);
+
+        return Result.WithSuccess(count);
     }
 }

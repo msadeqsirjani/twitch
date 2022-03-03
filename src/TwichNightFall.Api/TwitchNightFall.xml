@@ -123,5 +123,11 @@
             <param name="prize">The number of followers that has won this lottery is only between 1 and 5</param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.TotalForgivenessCount">
+            <summary>
+            Get the total count of unchecked forgiveness followers
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>
