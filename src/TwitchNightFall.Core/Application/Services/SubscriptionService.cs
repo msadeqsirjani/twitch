@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using TwitchNightFall.Common.Common;
 using TwitchNightFall.Common.Exceptions;
@@ -14,8 +15,9 @@ public interface ISubscriptionService : IServiceAsync<Subscription>
 {
     Task<Subscription?> GetSubscriptionAsync(Expression<Func<Subscription, bool>> predicate,
         CancellationToken cancellationToken = new());
-
     Task<Result> SubscribeAsync(Subscription subscription, CancellationToken cancellationToken = new());
+
+    Task<Result> ShowActivePlanAsync(Guid twitchId, CancellationToken cancellationToken = new());
 }
 
 public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionService
@@ -58,5 +60,35 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
         await Repository.AddAsync(subscription, cancellationToken);
 
         return Result.WithSuccess(Statement.Success);
+    }
+
+    public async Task<Result> ShowActivePlanAsync(Guid twitchId, CancellationToken cancellationToken = new())
+    {
+        var subscription = await Repository.Queryable(false)
+            .Include(x => x.Plan)
+            .ThenInclude(x => x.Forgiveness)
+            .FirstOrDefaultAsync(x => x.ExpiredAt >= DateTime.UtcNow && x.TwitchId == twitchId, cancellationToken);
+
+        if(subscription == null)
+            return Result.WithMessage("There is no active plan");
+
+        var result = new
+        {
+            Plan = new
+            {
+                subscription?.Plan?.Id,
+                subscription?.Plan?.Title,
+                subscription?.Plan?.Count,
+                subscription?.Plan?.DelayBetweenEveryPurchase,
+                subscription?.Plan?.PlanType,
+                subscription?.Plan?.PlanTime,
+                subscription?.Plan?.Price,
+                subscription?.Plan?.CreatedAt,
+                subscription?.Plan?.ModifiedAt,
+            },
+            Usage = subscription?.Plan?.Count - subscription?.Plan?.Forgiveness.Sum(x => x.Prize)
+        };
+
+        return Result.WithSuccess(result);
     }
 }

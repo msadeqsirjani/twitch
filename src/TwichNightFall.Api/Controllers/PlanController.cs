@@ -11,10 +11,12 @@ namespace TwitchNightFall.Api.Controllers;
 public class PlanController : ApplicationController
 {
     private readonly IPlanService _planService;
+    private readonly ISubscriptionService _subscriptionService;
 
-    public PlanController(IPlanService planService)
+    public PlanController(IPlanService planService, ISubscriptionService subscriptionService)
     {
         _planService = planService;
+        _subscriptionService = subscriptionService;
     }
 
     /// <summary>
@@ -35,5 +37,22 @@ public class PlanController : ApplicationController
         var result = await _planService.ShowPlansAsync(request, new Guid(twitchId!));
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Show active plan
+    /// </summary>
+    /// <returns></returns>
+    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status403Forbidden, Statement.UnAuthorized, typeof(Result))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
+    [HttpGet]
+    [Authorize(Policy = JwtService.Other)]
+    public async Task<IActionResult> ShowActivePlan()
+    {
+        var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        return Ok(await _subscriptionService.ShowActivePlanAsync(new Guid(twitchId!)));
     }
 }

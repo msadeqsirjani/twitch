@@ -35,5 +35,10 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
             .WithMany(x => x.Forgiveness)
             .HasForeignKey(x => x.ModifiedBy)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Plan)
+            .WithMany(x => x.Forgiveness)
+            .HasForeignKey(x => x.PlanId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

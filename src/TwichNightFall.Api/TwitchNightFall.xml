@@ -88,6 +88,12 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowActivePlan">
+            <summary>
+            Show active plan
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.TransactionController.Verify(System.String)">
             <summary>
             payment confirmation

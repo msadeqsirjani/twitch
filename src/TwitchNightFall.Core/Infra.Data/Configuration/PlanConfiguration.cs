@@ -41,6 +41,11 @@ public class PlanConfiguration : AuditableConfiguration<Plan>
             .HasForeignKey(x => x.PlanId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(x => x.Forgiveness)
+            .WithOne(x => x.Plan)
+            .HasForeignKey(x => x.PlanId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasData(new List<Plan>
         {
             new()

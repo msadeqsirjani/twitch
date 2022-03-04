@@ -9,6 +9,7 @@ public class Plan : Auditable
     {
         Subscription = new List<Subscription>();
         Transaction = new List<Transaction>();
+        Forgiveness = new List<Forgiveness>();
     }
 
     public string? Title { get; set; }
@@ -20,4 +21,5 @@ public class Plan : Auditable
 
     public ICollection<Subscription> Subscription { get; set; }
     public ICollection<Transaction> Transaction { get; set; }
+    public ICollection<Forgiveness> Forgiveness { get; set; }
 }

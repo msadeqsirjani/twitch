@@ -72,14 +72,14 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         Forgiveness forgiveness;
         if (!await Repository.ExistsAsync(x => x.TwitchId == twitchId, cancellationToken))
         {
-            forgiveness = new Forgiveness(twitchId, _options.FollowerGift, ForgivenessType.Gift);
+            forgiveness = new Forgiveness(twitchId, _options.FollowerGift, ForgivenessType.Gift, subscription?.PlanId);
 
             await Repository.AddAsync(forgiveness, cancellationToken);
 
             isFirstForgiveness = true;
         }
 
-        forgiveness = new Forgiveness(twitchId, prize, ForgivenessType.Free);
+        forgiveness = new Forgiveness(twitchId, prize, ForgivenessType.Free, subscription?.PlanId);
 
         await Repository.AddAsync(forgiveness, cancellationToken);
 
