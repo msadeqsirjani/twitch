@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TwitchNightFall.Common.Common;
 using TwitchNightFall.Common.Exceptions;
 using TwitchNightFall.Core.Application.Services.Common;
+using TwitchNightFall.Core.Application.ViewModels;
 using TwitchNightFall.Domain.Entities;
 using TwitchNightFall.Domain.Enums;
 using TwitchNightFall.Domain.Repository;
@@ -23,11 +25,13 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
 {
     private readonly IPlanRepository _planRepository;
     private readonly IForgivenessRepository _forgivenessRepository;
+    private readonly TwitchSetting _options;
 
-    public SubscriptionService(IRepositoryAsync<Subscription> repository, IPlanRepository planRepository, IForgivenessRepository forgivenessRepository) : base(repository)
+    public SubscriptionService(IRepositoryAsync<Subscription> repository, IPlanRepository planRepository, IForgivenessRepository forgivenessRepository, IOptions<TwitchSetting> options) : base(repository)
     {
         _planRepository = planRepository;
         _forgivenessRepository = forgivenessRepository;
+        _options = options.Value;
     }
 
     public async Task<Subscription?> GetSubscriptionAsync(Expression<Func<Subscription, bool>> predicate,
@@ -74,9 +78,9 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
 
         if (subscription == null)
         {
-            boundary = await _forgivenessRepository.CountAsync(x =>
-                x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
-                x.ForgivenessType == ForgivenessType.Free, cancellationToken);
+            boundary = _options.FollowerBoundary - await _forgivenessRepository.CountAsync(x =>
+               x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
+               x.ForgivenessType == ForgivenessType.Free, cancellationToken);
         }
         else
         {

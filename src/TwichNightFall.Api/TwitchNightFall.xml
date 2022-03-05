@@ -108,6 +108,13 @@
             <param name="transaction"></param>
             <returns></returns>
         </member>
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
+            <summary>
+            Check the existence of an equivalent username in Twitch and create an account to use the chance wheel
+            </summary>
+            <param name="username">Username of the lucky participant in the lottery</param>
+            <returns></returns>
+        </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.AccessToken(System.String)">
             <summary>
             Request to create an account and receive a token
