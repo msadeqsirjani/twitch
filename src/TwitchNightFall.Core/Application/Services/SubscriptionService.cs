@@ -90,6 +90,6 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
                 boundary = 0;
         }
 
-        return Result.WithSuccess(boundary);
+        return Result.WithSuccess(new { Boundary = boundary, HasActivePlan = subscription?.Plan != null });
     }
 }
