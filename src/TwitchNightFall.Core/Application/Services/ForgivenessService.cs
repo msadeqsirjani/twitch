@@ -53,7 +53,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         var subscription = await _subscriptionService.GetSubscriptionAsync(
             x => x.ExpiredAt >= now, cancellationToken);
 
-        if(subscription?.Plan?.PlanType == PlanType.PurchaseFollower)
+        if (subscription?.Plan?.PlanType == PlanType.PurchaseFollower)
             return Result.WithMessage("You can not spin the wheel due to the sharing scheme being active");
 
         if (subscription != null)
@@ -95,7 +95,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
 
-        return Result.WithSuccess(new { IsFirstForgiveness = isFirstForgiveness }, Statement.Success);
+        return Result.WithSuccess(new { IsFirstForgiveness = isFirstForgiveness, FollowerGift = isFirstForgiveness ? _options.FollowerBoundary : 0 }, Statement.Success);
     }
 
     public async Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new())
