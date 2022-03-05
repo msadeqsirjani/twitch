@@ -95,7 +95,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
         await _unitOfWorkAsync.SaveChangesAsync(cancellationToken);
 
-        return Result.WithSuccess(new { IsFirstForgiveness = isFirstForgiveness, FollowerGift = isFirstForgiveness ? _options.FollowerBoundary : 0 }, Statement.Success);
+        return Result.WithSuccess(new { IsFirstForgiveness = isFirstForgiveness, FollowerGift = isFirstForgiveness ? _options.FollowerGift : 0 }, Statement.Success);
     }
 
     public async Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new())
