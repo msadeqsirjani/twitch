@@ -48,20 +48,29 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
 
         var now = DateTime.UtcNow;
 
-        var count = await Repository.CountAsync(x =>
-            x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
-            x.ForgivenessType == ForgivenessType.Free, cancellationToken);
+        int count;
 
         var subscription = await _subscriptionService.GetSubscriptionAsync(
-            x => x.ExpiredAt >= DateTime.UtcNow && x.Plan!.PlanType == PlanType.LuckRound, cancellationToken);
+            x => x.ExpiredAt >= now, cancellationToken);
+
+        if(subscription?.Plan?.PlanType == PlanType.PurchaseFollower)
+            return Result.WithMessage("You can not spin the wheel due to the sharing scheme being active");
 
         if (subscription != null)
         {
-            if (count >= _options.FollowerBoundary + subscription.Plan?.Count)
-                throw new MessageException($"Each username can only use this feature {_options.FollowerBoundary + subscription.Plan!.Count} times a day");
+            count = await Repository.CountAsync(x =>
+                x.TwitchId == twitchId && x.PlanId == subscription.PlanId &&
+                x.ForgivenessType == ForgivenessType.Subscription, cancellationToken);
+
+            if (count >= subscription.Plan?.Count)
+                throw new MessageException($"Each username can only use this feature {subscription.Plan!.Count} times a day");
         }
         else
         {
+            count = await Repository.CountAsync(x =>
+                x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
+                x.ForgivenessType == ForgivenessType.Free, cancellationToken);
+
             if (count >= _options.FollowerBoundary)
                 throw new MessageException($"Each username can only use this feature {_options.FollowerBoundary} times a day");
         }
@@ -72,14 +81,15 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         Forgiveness forgiveness;
         if (!await Repository.ExistsAsync(x => x.TwitchId == twitchId, cancellationToken))
         {
-            forgiveness = new Forgiveness(twitchId, _options.FollowerGift, ForgivenessType.Gift, subscription?.PlanId);
+            forgiveness = new Forgiveness(twitchId, _options.FollowerGift, ForgivenessType.Gift);
 
             await Repository.AddAsync(forgiveness, cancellationToken);
 
             isFirstForgiveness = true;
         }
 
-        forgiveness = new Forgiveness(twitchId, prize, ForgivenessType.Free, subscription?.PlanId);
+        forgiveness = new Forgiveness(twitchId, prize,
+            subscription == null ? ForgivenessType.Free : ForgivenessType.Subscription, subscription?.PlanId);
 
         await Repository.AddAsync(forgiveness, cancellationToken);
 

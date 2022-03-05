@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using TwitchNightFall.Common.Common;
 using TwitchNightFall.Common.Exceptions;
@@ -17,7 +16,7 @@ public interface ISubscriptionService : IServiceAsync<Subscription>
         CancellationToken cancellationToken = new());
     Task<Result> SubscribeAsync(Subscription subscription, CancellationToken cancellationToken = new());
 
-    Task<Result> ShowActivePlanAsync(Guid twitchId, CancellationToken cancellationToken = new());
+    Task<Result> ShowFollowerBoundary(Guid twitchId, CancellationToken cancellationToken = new());
 }
 
 public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionService
@@ -50,7 +49,7 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
 
         if (plan.PlanType == PlanType.PurchaseFollower)
         {
-            var forgiveness = new Forgiveness(subscription.TwitchId, plan.Count, ForgivenessType.Subscription);
+            var forgiveness = new Forgiveness(subscription.TwitchId, plan.Count, ForgivenessType.Subscription, plan.Id);
 
             await _forgivenessRepository.AddAsync(forgiveness, cancellationToken);
         }
@@ -62,33 +61,31 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
         return Result.WithSuccess(Statement.Success);
     }
 
-    public async Task<Result> ShowActivePlanAsync(Guid twitchId, CancellationToken cancellationToken = new())
+    public async Task<Result> ShowFollowerBoundary(Guid twitchId, CancellationToken cancellationToken = new())
     {
+        var now = DateTime.UtcNow;
+
         var subscription = await Repository.Queryable(false)
             .Include(x => x.Plan)
             .ThenInclude(x => x.Forgiveness)
-            .FirstOrDefaultAsync(x => x.ExpiredAt >= DateTime.UtcNow && x.TwitchId == twitchId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.ExpiredAt >= now && x.TwitchId == twitchId, cancellationToken);
 
-        if(subscription == null)
-            return Result.WithMessage("There is no active plan");
+        int boundary;
 
-        var result = new
+        if (subscription == null)
         {
-            Plan = new
-            {
-                subscription?.Plan?.Id,
-                subscription?.Plan?.Title,
-                subscription?.Plan?.Count,
-                subscription?.Plan?.DelayBetweenEveryPurchase,
-                subscription?.Plan?.PlanType,
-                subscription?.Plan?.PlanTime,
-                subscription?.Plan?.Price,
-                subscription?.Plan?.CreatedAt,
-                subscription?.Plan?.ModifiedAt,
-            },
-            Usage = subscription?.Plan?.Count - subscription?.Plan?.Forgiveness.Sum(x => x.Prize)
-        };
+            boundary = await _forgivenessRepository.CountAsync(x =>
+                x.TwitchId == twitchId && EF.Functions.DateDiffDay(x.CreatedAt, now) == 0 &&
+                x.ForgivenessType == ForgivenessType.Free, cancellationToken);
+        }
+        else
+        {
+            if (subscription.Plan?.PlanType == PlanType.LuckRound)
+                boundary = subscription.Plan?.Count - subscription.Plan?.Forgiveness.Count ?? 0;
+            else
+                boundary = 0;
+        }
 
-        return Result.WithSuccess(result);
+        return Result.WithSuccess(boundary);
     }
 }

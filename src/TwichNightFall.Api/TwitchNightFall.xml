@@ -88,7 +88,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowActivePlan">
+        <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowFollowerBoundary">
             <summary>
             Show active plan
             </summary>
@@ -106,13 +106,6 @@
             Payment and registration of joint plan
             </summary>
             <param name="transaction"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Availability(System.String)">
-            <summary>
-            Check the existence of an equivalent username in Twitch and create an account to use the chance wheel
-            </summary>
-            <param name="username">Username of the lucky participant in the lottery</param>
             <returns></returns>
         </member>
         <member name="M:TwitchNightFall.Api.Controllers.TwitchController.AccessToken(System.String)">

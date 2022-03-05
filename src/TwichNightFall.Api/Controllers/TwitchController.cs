@@ -19,22 +19,6 @@ public class TwitchController : ApplicationController
     }
 
     /// <summary>
-    /// Check the existence of an equivalent username in Twitch and create an account to use the chance wheel
-    /// </summary>
-    /// <param name="username">Username of the lucky participant in the lottery</param>
-    /// <returns></returns>
-    [SwaggerResponse(StatusCodes.Status200OK, Statement.Success, typeof(Result))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
-    [HttpGet]
-    [AllowAnonymous]
-    public async Task<IActionResult> Availability(string username)
-    {
-        var result = await _twitchService.IsAvailableTwitch(username);
-
-        return Ok(Result.WithSuccess(result));
-    }
-
-    /// <summary>
     /// Request to create an account and receive a token
     /// </summary>
     /// <param name="username"></param>

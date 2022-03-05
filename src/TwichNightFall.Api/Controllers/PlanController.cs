@@ -49,10 +49,10 @@ public class PlanController : ApplicationController
     [SwaggerResponse(StatusCodes.Status500InternalServerError, Statement.Failure, typeof(Result))]
     [HttpGet]
     [Authorize(Policy = JwtService.Other)]
-    public async Task<IActionResult> ShowActivePlan()
+    public async Task<IActionResult> ShowFollowerBoundary()
     {
         var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        return Ok(await _subscriptionService.ShowActivePlanAsync(new Guid(twitchId!)));
+        return Ok(await _subscriptionService.ShowFollowerBoundary(new Guid(twitchId!)));
     }
 }

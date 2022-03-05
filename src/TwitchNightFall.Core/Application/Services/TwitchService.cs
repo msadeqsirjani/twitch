@@ -16,7 +16,6 @@ public interface ITwitchService : IServiceAsync<Twitch>
     Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
     Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new());
     Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new());
-
     Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new());
 }
 
@@ -68,6 +67,9 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
 
     public async Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new())
     {
+        if (!await IsAvailableTwitch(username, cancellationToken))
+            return Result.WithMessage($"This username '{username}' doesn't exist in Twitch");
+
         var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
 
         if (twitch == null)

@@ -14,12 +14,14 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
 
         builder.Property(x => x.TwitchId)
             .IsRequired();
-       
+
         builder.Property(x => x.Prize)
             .IsRequired();
 
         builder.Property(x => x.IsChecked)
             .IsRequired();
+
+        builder.Property(x => x.PlanId).IsRequired(false);
 
         builder.Property(x => x.ForgivenessType)
             .HasConversion<string>();
@@ -34,7 +36,7 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
         builder.HasOne(x => x.Administrator)
             .WithMany(x => x.Forgiveness)
             .HasForeignKey(x => x.ModifiedBy)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Plan)
             .WithMany(x => x.Forgiveness)
