@@ -85,13 +85,15 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         return Result.WithSuccess(token);
     }
 
-    public async Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new())
     {
         var count = await Repository.Queryable(false)
+            .AsNoTracking()
+            .Where(x => x.Id == id)
             .Include(x => x.Forgiveness)
             .SelectMany(x => x.Forgiveness)
             .Where(x => !x.IsChecked)
-            .Select(x=>x.Prize)
+            .Select(x => x.Prize)
             .SumAsync(cancellationToken);
 
         return Result.WithSuccess(count);
