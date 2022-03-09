@@ -12,7 +12,7 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "PlanId",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
@@ -116,13 +116,13 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Forgiveness_PlanId",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 column: "PlanId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Forgiveness_Plan_PlanId",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 column: "PlanId",
                 principalSchema: "ray",
                 principalTable: "Plan",
@@ -135,17 +135,17 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Forgiveness_Plan_PlanId",
                 schema: "ray",
-                table: "Forgiveness");
+                table: "ForgivenessAsync");
 
             migrationBuilder.DropIndex(
                 name: "IX_Forgiveness_PlanId",
                 schema: "ray",
-                table: "Forgiveness");
+                table: "ForgivenessAsync");
 
             migrationBuilder.DropColumn(
                 name: "PlanId",
                 schema: "ray",
-                table: "Forgiveness");
+                table: "ForgivenessAsync");
 
             migrationBuilder.UpdateData(
                 schema: "ray",

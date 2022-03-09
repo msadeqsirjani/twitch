@@ -29,7 +29,7 @@ public class TwitchController : ApplicationController
     [AllowAnonymous]
     public async Task<IActionResult> Availability(string username)
     {
-        var result = await _twitchService.IsAvailableTwitch(username);
+        var result = await _twitchService.IsAvailableTwitchAsync(username);
 
         return Ok(Result.WithSuccess(result));
     }
@@ -45,7 +45,7 @@ public class TwitchController : ApplicationController
     [AllowAnonymous]
     public async Task<IActionResult> AccessToken(string username)
     {
-        return Ok(await _twitchService.GetAccessToken(username));
+        return Ok(await _twitchService.GetAccessTokenAsync(username));
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class TwitchController : ApplicationController
     {
         var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        var result = await _forgivenessService.Forgiveness(new Guid(twitchId!), prize);
+        var result = await _forgivenessService.ForgivenessAsync(new Guid(twitchId!), prize);
 
         return Ok(result);
     }
@@ -82,6 +82,6 @@ public class TwitchController : ApplicationController
     {
         var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        return Ok(await _twitchService.TotalForgivenessCount(new Guid(twitchId!)));
+        return Ok(await _twitchService.TotalForgivenessCountAsync(new Guid(twitchId!)));
     }
 }

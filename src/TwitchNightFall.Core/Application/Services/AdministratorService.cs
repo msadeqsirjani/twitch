@@ -12,7 +12,7 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IAdministratorService : IServiceAsync<Administrator>
 {
     Task<Result> SignInAsync(string username, string password, CancellationToken cancellationToken = new());
-    Task<Result> AddAdministrator(AdministratorDto administratorDto, CancellationToken cancellationToken = new());
+    Task<Result> AddAdministratorAsync(AdministratorDto administratorDto, CancellationToken cancellationToken = new());
     Task<Result> ShowProfileAsync(Guid id, HttpContext context, CancellationToken cancellationToken = new());
     Task<Result> SaveProfileAsync(AdministratorDto administratorDto, CancellationToken cancellationToken = new());
 }
@@ -44,7 +44,7 @@ public class AdministratorService : ServiceAsync<Administrator>, IAdministratorS
         return Result.WithSuccess(jwtTokenDto);
     }
 
-    public async Task<Result> AddAdministrator(AdministratorDto administratorDto, CancellationToken cancellationToken = new())
+    public async Task<Result> AddAdministratorAsync(AdministratorDto administratorDto, CancellationToken cancellationToken = new())
     {
         var validation = await _validator.ValidateAsync(administratorDto, cancellationToken);
         if (!validation.IsValid)

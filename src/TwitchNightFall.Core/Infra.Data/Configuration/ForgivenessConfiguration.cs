@@ -10,7 +10,7 @@ public class ForgivenessConfiguration : AuditableConfiguration<Forgiveness>
     {
         base.Configure(builder);
 
-        builder.ToTable("Forgiveness", "ray");
+        builder.ToTable("ForgivenessAsync", "ray");
 
         builder.Property(x => x.TwitchId)
             .IsRequired();

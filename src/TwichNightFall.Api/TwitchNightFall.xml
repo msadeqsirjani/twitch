@@ -12,7 +12,7 @@
             <param name="password">Admin Password</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.AddAdministrator(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.AddAdministratorAsync(TwitchNightFall.Core.Application.ViewModels.Administrator.AdministratorDto)">
             <summary>
             Add new admin to the system
             </summary>
@@ -32,7 +32,7 @@
             <param name="administrator">Input model for editing admin profile</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchProfile(System.String)">
+        <member name="M:TwitchNightFall.Api.Controllers.AdministratorController.ShowTwitchProfileAsync(System.String)">
             <summary>
             View Twitch page info
             </summary>
@@ -74,9 +74,9 @@
             <param name="filename">The title of the file given to the user at the output of the upload file</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.FileController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:TwitchNightFall.Api.Controllers.FileController.UploadAsync(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            Upload admin profile pictures
+            UploadAsync admin profile pictures
             </summary>
             <param name="file">File to upload to file server</param>
             <returns></returns>
@@ -88,7 +88,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowFollowerBoundary">
+        <member name="M:TwitchNightFall.Api.Controllers.PlanController.ShowPlanBoundaryAsync">
             <summary>
             Show active plan
             </summary>
@@ -122,14 +122,14 @@
             <param name="username"></param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.Forgiveness(System.Int32)">
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.ForgivenessAsync(System.Int32)">
             <summary>
             Save and check the chance wheel of the followers
             </summary>
             <param name="prize">The number of followers that has won this lottery is only between 1 and 5</param>
             <returns></returns>
         </member>
-        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.TotalForgivenessCount">
+        <member name="M:TwitchNightFall.Api.Controllers.TwitchController.TotalForgivenessCountAsync">
             <summary>
             Get the total count of unchecked forgiveness followers
             </summary>

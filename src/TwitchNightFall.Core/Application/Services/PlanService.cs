@@ -1,6 +1,5 @@
 ﻿using Gridify;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using TwitchNightFall.Common.Common;
 using TwitchNightFall.Core.Application.Services.Common;
 using TwitchNightFall.Domain.Entities;

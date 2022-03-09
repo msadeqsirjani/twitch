@@ -87,7 +87,7 @@ namespace TwitchNightFall.Core.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TwitchNightFall.Domain.Entities.Forgiveness", b =>
+            modelBuilder.Entity("TwitchNightFall.Domain.Entities.ForgivenessAsync", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,7 +122,7 @@ namespace TwitchNightFall.Core.Migrations
 
                     b.HasIndex("TwitchId");
 
-                    b.ToTable("Forgiveness", "ray");
+                    b.ToTable("ForgivenessAsync", "ray");
                 });
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Plan", b =>
@@ -395,19 +395,19 @@ namespace TwitchNightFall.Core.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("TwitchNightFall.Domain.Entities.Forgiveness", b =>
+            modelBuilder.Entity("TwitchNightFall.Domain.Entities.ForgivenessAsync", b =>
                 {
                     b.HasOne("TwitchNightFall.Domain.Entities.Administrator", "Administrator")
                         .WithMany()
                         .HasForeignKey("AdministratorId");
 
                     b.HasOne("TwitchNightFall.Domain.Entities.Administrator", null)
-                        .WithMany("Forgiveness")
+                        .WithMany("ForgivenessAsync")
                         .HasForeignKey("ModifiedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TwitchNightFall.Domain.Entities.Twitch", "Twitch")
-                        .WithMany("Forgiveness")
+                        .WithMany("ForgivenessAsync")
                         .HasForeignKey("TwitchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -457,7 +457,7 @@ namespace TwitchNightFall.Core.Migrations
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Administrator", b =>
                 {
-                    b.Navigation("Forgiveness");
+                    b.Navigation("ForgivenessAsync");
                 });
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Plan", b =>
@@ -469,7 +469,7 @@ namespace TwitchNightFall.Core.Migrations
 
             modelBuilder.Entity("TwitchNightFall.Domain.Entities.Twitch", b =>
                 {
-                    b.Navigation("Forgiveness");
+                    b.Navigation("ForgivenessAsync");
 
                     b.Navigation("Subscription");
 

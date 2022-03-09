@@ -6,7 +6,7 @@ namespace TwitchNightFall.Core.Application.Services;
 public interface IFileService
 {
     Task<byte[]> DownloadAsync(string filename, CancellationToken cancellationToken = new());
-    Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new());
+    Task<string> UploadAsync(IFormFile file, CancellationToken cancellationToken = new());
 }
 
 public class FileService : IFileService
@@ -28,7 +28,7 @@ public class FileService : IFileService
         return File.ReadAllBytesAsync(filePath, cancellationToken);
     }
 
-    public async Task<string> Upload(IFormFile file, CancellationToken cancellationToken = new())
+    public async Task<string> UploadAsync(IFormFile file, CancellationToken cancellationToken = new())
     {
         var path = Path.Combine(_environment.WebRootPath, UploadDirectory);
 

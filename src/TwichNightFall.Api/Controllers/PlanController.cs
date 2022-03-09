@@ -53,6 +53,6 @@ public class PlanController : ApplicationController
     {
         var twitchId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        return Ok(await _subscriptionService.ShowFollowerBoundary(new Guid(twitchId!)));
+        return Ok(await _subscriptionService.ShowPlanBoundaryAsync(new Guid(twitchId!)));
     }
 }

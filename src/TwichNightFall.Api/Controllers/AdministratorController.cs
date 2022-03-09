@@ -59,7 +59,7 @@ public class AdministratorController : ApplicationController
 
         administrator.CreatedBy = Guid.Parse(administratorId!);
 
-        var result = await _administratorService.AddAdministrator(administrator);
+        var result = await _administratorService.AddAdministratorAsync(administrator);
 
         return Ok(result);
     }
@@ -118,7 +118,7 @@ public class AdministratorController : ApplicationController
     [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> ShowTwitchProfile(string username)
     {
-        var result = await _twitchService.ShowTwitchProfile(username);
+        var result = await _twitchService.ShowTwitchProfileAsync(username);
 
         return Ok(Result.WithSuccess(result!));
     }

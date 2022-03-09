@@ -12,7 +12,7 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "ForgivenessType",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -119,7 +119,7 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.DropColumn(
                 name: "ForgivenessType",
                 schema: "ray",
-                table: "Forgiveness");
+                table: "ForgivenessAsync");
 
             migrationBuilder.UpdateData(
                 schema: "ray",

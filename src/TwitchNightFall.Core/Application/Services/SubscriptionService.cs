@@ -18,7 +18,7 @@ public interface ISubscriptionService : IServiceAsync<Subscription>
         CancellationToken cancellationToken = new());
     Task<Result> SubscribeAsync(Subscription subscription, CancellationToken cancellationToken = new());
 
-    Task<Result> ShowFollowerBoundary(Guid twitchId, CancellationToken cancellationToken = new());
+    Task<Result> ShowPlanBoundaryAsync(Guid twitchId, CancellationToken cancellationToken = new());
 }
 
 public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionService
@@ -65,7 +65,7 @@ public class SubscriptionService : ServiceAsync<Subscription>, ISubscriptionServ
         return Result.WithSuccess(Statement.Success);
     }
 
-    public async Task<Result> ShowFollowerBoundary(Guid twitchId, CancellationToken cancellationToken = new())
+    public async Task<Result> ShowPlanBoundaryAsync(Guid twitchId, CancellationToken cancellationToken = new())
     {
         var now = DateTime.UtcNow;
 

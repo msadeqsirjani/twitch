@@ -76,7 +76,7 @@ namespace TwitchNightFall.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Forgiveness",
+                name: "ForgivenessAsync",
                 schema: "ray",
                 columns: table => new
                 {
@@ -220,19 +220,19 @@ namespace TwitchNightFall.Core.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Forgiveness_AdministratorId",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 column: "AdministratorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Forgiveness_ModifiedBy",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 column: "ModifiedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Forgiveness_TwitchId",
                 schema: "ray",
-                table: "Forgiveness",
+                table: "ForgivenessAsync",
                 column: "TwitchId");
 
             migrationBuilder.CreateIndex(
@@ -270,7 +270,7 @@ namespace TwitchNightFall.Core.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Forgiveness",
+                name: "ForgivenessAsync",
                 schema: "ray");
 
             migrationBuilder.DropTable(

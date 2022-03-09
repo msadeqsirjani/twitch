@@ -15,7 +15,7 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface IForgivenessService : IServiceAsync<Forgiveness>
 {
-    Task<Result> Forgiveness(Guid twitchId, int prize, CancellationToken cancellationToken = new());
+    Task<Result> ForgivenessAsync(Guid twitchId, int prize, CancellationToken cancellationToken = new());
     Task<Result> CompleteAsync(Guid id, Guid administrator, CancellationToken cancellationToken = new());
     Paging<MonitorTwitch> ShowDetail(GridifyQuery request);
     Paging<ForgivenessDto> ShowHistory(GridifyQuery request);
@@ -40,7 +40,7 @@ public class ForgivenessService : ServiceAsync<Forgiveness>, IForgivenessService
         _options = options.Value;
     }
 
-    public async Task<Result> Forgiveness(Guid twitchId, int prize, CancellationToken cancellationToken = new())
+    public async Task<Result> ForgivenessAsync(Guid twitchId, int prize, CancellationToken cancellationToken = new())
     {
         var isFirstForgiveness = false;
         if (prize is > 5 or < 0)

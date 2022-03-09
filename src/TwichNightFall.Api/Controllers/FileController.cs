@@ -46,7 +46,7 @@ public class FileController : ApplicationController
     [Authorize(Policy = JwtService.Administrator)]
     public async Task<IActionResult> Upload(IFormFile file)
     {
-        var filename = await _fileService.Upload(file);
+        var filename = await _fileService.UploadAsync(file);
 
         var downloadLink = (Request.IsHttps ? "https" : "http") + $"://{Request.Host}/File/Download?filename={filename}";
 

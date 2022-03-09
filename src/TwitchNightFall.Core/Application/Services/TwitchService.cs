@@ -13,10 +13,10 @@ namespace TwitchNightFall.Core.Application.Services;
 
 public interface ITwitchService : IServiceAsync<Twitch>
 {
-    Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new());
-    Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new());
-    Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new());
-    Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new());
+    Task<TwitchHelixInfo?> ShowTwitchProfileAsync(string username, CancellationToken cancellationToken = new());
+    Task<bool> IsAvailableTwitchAsync(string username, CancellationToken cancellationToken = new());
+    Task<Result> GetAccessTokenAsync(string username, CancellationToken cancellationToken = new());
+    Task<Result> TotalForgivenessCountAsync(Guid id, CancellationToken cancellationToken = new());
 }
 
 public class TwitchService : ServiceAsync<Twitch>, ITwitchService
@@ -38,7 +38,7 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         _options = options.Value;
     }
 
-    public async Task<TwitchHelixInfo?> ShowTwitchProfile(string username, CancellationToken cancellationToken = new())
+    public async Task<TwitchHelixInfo?> ShowTwitchProfileAsync(string username, CancellationToken cancellationToken = new())
     {
         var request = new HttpRequestMessage
         {
@@ -60,14 +60,14 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         return data.Data.FirstOrDefault();
     }
 
-    public async Task<bool> IsAvailableTwitch(string username, CancellationToken cancellationToken = new())
+    public async Task<bool> IsAvailableTwitchAsync(string username, CancellationToken cancellationToken = new())
     {
-        return await ShowTwitchProfile(username, cancellationToken) != null;
+        return await ShowTwitchProfileAsync(username, cancellationToken) != null;
     }
 
-    public async Task<Result> GetAccessToken(string username, CancellationToken cancellationToken = new())
+    public async Task<Result> GetAccessTokenAsync(string username, CancellationToken cancellationToken = new())
     {
-        if (!await IsAvailableTwitch(username, cancellationToken))
+        if (!await IsAvailableTwitchAsync(username, cancellationToken))
             return Result.WithMessage($"This username '{username}' doesn't exist in Twitch");
 
         var twitch = await Repository.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
@@ -85,7 +85,7 @@ public class TwitchService : ServiceAsync<Twitch>, ITwitchService
         return Result.WithSuccess(token);
     }
 
-    public async Task<Result> TotalForgivenessCount(Guid id, CancellationToken cancellationToken = new())
+    public async Task<Result> TotalForgivenessCountAsync(Guid id, CancellationToken cancellationToken = new())
     {
         var count = await Repository.Queryable(false)
             .AsNoTracking()
